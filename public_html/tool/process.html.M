@@ -1,0 +1,510 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>Alma Migration Team</title>
+
+<!--iOS/android/handheld specific -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" type="text/css" media="all" href="../style.css">
+
+<!--[if lt IE 9]>
+                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+<script src="../js/modernizr.js"></script>
+<script src="../js/customscript.js" type="text/javascript"></script>
+
+<style type="text/css">
+#header h1,#header h2
+{
+        text-indent: -999em;
+        min-width: 200px;
+        margin-top: 0;
+}
+
+#header h1 a,#header h2 a
+{
+        background: url(../images/AMO_Logo.png) no-repeat;
+        min-width: 220px;
+        display: block;
+        min-height: 100px;
+        line-height: 28px;
+}
+
+</style>
+
+<script>
+
+        function _(el) {
+                return document.getElementById(el);
+        }
+        function uploadFile() {
+                var file = _("file1").files[0];
+                // alert(file.name+" | "+file.size+" | "+file.type);
+                var formdata = new FormData();
+                formdata.append("file1", file);
+                var ajax = new XMLHttpRequest();
+                ajax.upload.addEventListener("progress", progressHandler, false);
+                ajax.addEventListener("load", completeHandler, false);
+                ajax.addEventListener("error", errorHandler, false);
+                ajax.addEventListener("abort", abortHandler, false);
+                ajax.open("POST", "file_upload_parser.php");
+                ajax.send(formdata);
+        }
+        function progressHandler(event) {
+                _("loaded_n_total").innerHTML = "Uploaded " + event.loaded
+                                + " bytes of " + event.total;
+                var percent = (event.loaded / event.total) * 100;
+                _("progressBar").value = Math.round(percent);
+                _("status").innerHTML = Math.round(percent)
+                                + "% uploaded... please wait";
+        }
+        function completeHandler(event) {
+                _("status").innerHTML = event.target.responseText;
+                _("progressBar").value = 0;
+        }
+        function errorHandler(event) {
+                _("status").innerHTML = "Upload Failed";
+        }
+        function abortHandler(event) {
+                _("status").innerHTML = "Upload Aborted";
+        }
+
+        function getvalueFromDropdown() {
+
+                if (document.getElementById('migEnv')) {
+                        alert(document.getElementById('migEnv').value);
+                        var option = document.getElementById('migEnv').value;
+                }
+
+        }
+
+</script>
+
+
+</head>
+
+<body>
+
+<header class="main-header">
+                <div class="container">
+                        <div id="header">
+                                <h1 id="logo">
+                                        <a href="http://il-almaimp01/~amirc/">Alma Migration Operations</a>
+                                </h1>
+                                <!-- END #logo -->
+                        </div>
+                        <!--#header-->
+                </div>
+                <!--.container-->
+ </header>
+
+        <div class="container">
+                <div class="secondary-navigation">
+                        <nav id="navigation">
+                                <ul class="menu">
+                                        <li class="menu-item"><a href="http://il-spapp01/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx">Migration Calendar</a></li>
+                                        <li class="menu-item"><a href="http://il-almabuild01:8080/examples/AlmaInstitutionList/" target="_blank">Instituions List</a></li>
+                                        <li class="menu-item"><a href="http://jenkins01.prod.alma.dc04.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins NA</a></li>
+                                        <li class="menu-item"><a href="http://jenkins01.prod.alma.dc03.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins EU</a></li>
+                                        <li class="menu-item"><a href="http://10.32.76.52:8080/" target="_blank">Jenkins APAC</a></li>
+                                        <li class="menu-item"><a href="http://il-mona/login" target="_blank">Mona</a></li>
+                                </ul>
+
+                        </nav>
+                </div>
+        </div>
+
+
+<div id="page">
+                <div class="content">
+                        <article class="article" >
+                                <div id="content_box" >
+<!-- style="padding:1300px;width: 1200px;"> -->
+
+
+                                        <div class="post excerpt ">
+
+
+<?php
+
+        set_include_path(get_include_path() . PATH_SEPARATOR . '../Classes/');
+        include '../Classes/PHPExcel/IOFactory.php';
+
+
+        echo '<font size="6" color="black"><b>Pre Migration Report</b></font>';
+
+        echo "<br><br>";
+
+
+        if  ($_POST['migEnvName'] != "")
+        {
+                echo "<b>Migration Environment: </b>";
+                echo $_POST['migEnvName'];
+                $fullEnvName = $_POST['migEnvName'];
+        }
+        echo "<br><br>";
+
+        if  ($_POST['migEnv'] != "-1")
+        {
+
+                echo "<b>Migration Server:      </b>";
+                echo $_POST['migEnv'] ;
+        }
+        if  ($_POST['migEnv'] != "-1")
+        {
+                $HostName = $_POST['migEnv'];
+        }
+
+
+        $envName = $_POST['migEnvName'];
+        $envName = explode('_', $envName);
+        array_pop($envName);
+        $envName = implode('_', $envName);
+
+        echo "<br><br>";
+
+
+
+        $output_deliveredFiles = shell_exec('ls -t uploads/ | tail -1');
+
+        exec('cd uploads/ && for file in *; do mv "$file" `echo $file | tr " " "_"` ; done" && cd ../');
+
+                echo "<b>Delivered Fiels List uploaded:</b>";
+                echo "<pre><pre>$output_deliveredFiles</pre></pre>";
+
+        echo "<br>";
+
+
+        echo $fullEnvName;
+        echo "<br>";
+
+        $countProvidedBibs = "
+
+        dinst {$fullEnvName} go input
+
+	 echo 'Number of bibs provided:'
+    mrcstat *bib*mrc | grep Overall
+        mrcstat *bib*out| grep Overall";
+
+        $countProvidedHoldings = "
+
+        dinst {$fullEnvName}
+        go input
+    echo 'Number of Holdings provided:'
+    mrcstat *hol*mrc | grep Overall
+        mrcstat *hol*out| grep Overall
+        mrcstat *Hol*mrc | grep Overall
+        mrcstat *Hol*out | grep Overall";
+
+
+        $countBibXmls = "
+
+        dinst {$fullEnvName}
+        go output
+        echo 'Number of bib XMLs created:'
+        cd BIB
+        find . -name '*xml' | wc -l";
+
+        $countBibBoundWith = "
+        dinst {$fullEnvName}
+        go input
+        grep bw global_boundwith.csv | wc -l";
+
+        $countBibRejected = "
+        dinst {$fullEnvName}
+        go report
+        wc -l bib_rejected* | grep total";
+
+        $connection = ssh2_connect($HostName, 22);
+        ssh2_auth_password($connection, 'urm', 'urm');
+
+
+        $stream = ssh2_exec($connection, $countProvidedBibs);
+        stream_set_blocking($stream, true);
+        $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
+
+        /*
+        echo "<b> Count of bibs Provided by customer </b><br>";
+
+                echo "<pre>";
+                print stream_get_contents($stream_out,6,2);
+                echo "</pre>";
+        */
+
+        $bibP = stream_get_contents($stream_out);
+        $pieces = explode(':', $bibP);
+        $last_word_bibP = array_pop($pieces);
+
+
+        $stream_holdingProvided = ssh2_exec($connection, $countProvidedHoldings);
+        stream_set_blocking($stream_holdingProvided, true);
+        $stream_out_holdingsProvided = ssh2_fetch_stream($stream_holdingProvided, SSH2_STREAM_STDIO);
+
+        $holP = stream_get_contents($stream_out);
+        $pieces = explode(':', $holP);
+        $last_word_holP = array_pop($pieces);
+
+
+        $stream_bibXmls = ssh2_exec($connection, $countBibXmls);
+        stream_set_blocking($stream_bibXmls, true);
+        $stream_out_bibXmls = ssh2_fetch_stream($stream_bibXmls, SSH2_STREAM_STDIO);
+
+        /*
+        echo "<b> Count of bib Xmls created by migration: </b><br>";
+                echo "<pre>";
+                        print stream_get_contents($stream_out_bibXmls,6,2);
+                echo "</pre>";
+        */
+        $bibX = stream_get_contents($stream_out_bibXmls);
+        $pieces = explode(':', $bibX);
+        $last_word_bibX = array_pop($pieces);
+
+        $stream_bibRejected = ssh2_exec($connection, $countBibRejected);
+        stream_set_blocking($stream_bibRejected, true);
+        $stream_out_bibRejecteds = ssh2_fetch_stream($stream_bibRejected, SSH2_STREAM_STDIO);
+
+
+        echo "<b> Count of bib rejected during migration: </b><br>";
+                echo "<pre>";
+                        print stream_get_contents($stream_out_bibRejecteds);
+                echo "</pre>";
+
+        $stream_bibBW = ssh2_exec($connection, $countBibBoundWith);
+        stream_set_blocking($stream_bibBW, true);
+        $stream_out_bibBW = ssh2_fetch_stream($stream_bibBW, SSH2_STREAM_STDIO);
+
+        echo "<b> Count of BoundWith bib created during migration: </b><br>";
+                echo "<pre>";
+                        print stream_get_contents($stream_out_bibBW);
+                echo "</pre>";
+
+
+
+
+        echo "<b> Count of bibIndex and globalInventoryIndex: </b><br>";
+        exec("bash checkMigEnvironment.sh {$HostName} {$envName} | grep -A1 Hit | grep -v '*'",$output2);
+                echo "<pre>";
+                print_r($output2);
+                echo "</pre>";
+        echo "<br><br>";
+
+/*
+                echo '<table id="t01" style="color:black; border-color:#0000ff; width:900px">
+        <thread>
+                <tr>
+                <th><b>No</b></th>
+                <th><b>Category</b></th>
+                <th><b>Count</b></th>
+                </tr>
+        </thread>
+
+        <tbody>
+        <td><b>1</b></td>
+        <td>Bib Provided by the customer</td>
+        <td>'. $last_word_bibP.'</td>
+        </tbody>
+        <tbody>
+        <td><b>2</b></td>
+        <td>Bib XMLs created by Migration</td>
+        <td>'. $last_word_bibX.'</td>
+        </tbody>
+        <tbody>
+        <td><b></b></td>
+        <td></td>
+        <td></td>
+        </tbody>
+
+        </table>';
+*/
+
+// Get Values from delivered files list:
+
+/*
+$outputBibFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'bibs'");
+$outputHoldingsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'holdings'");
+$outputItemsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'items'");
+$outputPatronsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'patrons'");
+$outputLoansFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'loans'");
+$outputRequestsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'requests'");
+$outputOrdersFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'orders'");
+$outputFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'funds'");
+$outputP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'p2e'");
+
+*/
+
+// Get files Names from delivered files list:
+
+$nameBibFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'bibs' 'true'");
+$nameHoldingsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'holdings' 'true'");
+$nameItemsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'items' 'true'");
+$namePatronsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'patrons' 'true'");
+$nameLoansFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'loans' 'true'");
+$nameRequestsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'requests' 'true'");
+$nameOrdersFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'orders' 'true'");
+$nameFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'funds' 'true'");
+$nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'p2e' 'true'");
+
+
+                echo "<pre>";
+                echo $nameBibFromList;
+                echo $nameHoldingsFromList;
+                echo $nameItemsFromList;
+                echo $namePatronsFromList;
+                echo $nameLoansFromList;
+                echo $nameRequestsFromList;
+                echo $nameOrdersFromList;
+                echo $nameFundsFromList;
+                echo $nameP2EFromList;
+                echo "</pre>";
+
+
+
+        echo '<div style="width: 135%; overflow: hidden;">
+
+
+        <div style="width: 325px; float: left;">
+
+
+        <table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+  <tr>
+    <th><b>Listed in Delivered Files List</b></th>
+    <th><b>Count</b></th>
+  </tr>
+  <tr>
+    <td>Bibs</td>
+    <td>'. $outputBibFromList.'</td>
+  </tr>
+  <tr>
+    <td>Holdings</td>
+    <td>'. $outputHoldingsFromList.'</td>
+  </tr>
+        <tr>
+    <td>Items</td>
+    <td>'. $outputItemsFromList.'</td>
+  </tr>
+        <tr>
+    <td>Patrons</td>
+    <td>'. $outputPatronsFromList.'</td>
+  </tr>
+         </tr>
+        <tr>
+    <td>Loans</td>
+    <td>'. $outputLoansFromList.'</td>
+  </tr>
+<tr>
+    <td>Requests</td>
+    <td>'. $outputRequestsFromList.'</td>
+  </tr>
+        <tr>
+    <td>Orders</td>
+    <td>'. $outputOrdersFromList.'</td>
+  </tr>
+<tr>
+    <td>Funds</td>
+    <td>'. $outputFundsFromList.'</td>
+  </tr>
+<tr>
+    <td>P2E</td>
+    <td>'. $outputP2EFromList.'</td>
+  </tr>
+</table>
+
+</div>
+
+
+
+<div style="width: 325px; float: left;">
+
+
+        <table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+  <tr>
+    <th><b>Provided source data</b></th>
+    <th><b>Count</b></th>
+  </tr>
+  <tr>
+    <td>Bibs</td>
+    <td>'. $last_word_bibP.'</td>
+  </tr>
+  <tr>
+    <td>Holdings</td>
+    <td>'. $last_word_holP.'</td>
+  </tr>
+</table>
+
+</div>
+
+
+    <div style="margin-left: 659px; width:303px">
+<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+  <tr>
+    <th><b>Created XMLs</b></th>
+    <th><b>Count</b></th>
+  </tr>
+  <tr>
+    <td>Bib XMLs</td>
+    <td>'. $last_word_bibX.'</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</div>
+
+ </div>
+</div>';
+
+        echo '<br>';
+        echo '<div style="width:610px;height:auto;position:relative;">';
+        echo "<b> Provided files from Delivered Files List</b>";
+/*
+        $output3 = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'bibs'");
+
+                echo "<pre><pre>$output3</pre></pre>";
+
+        echo '</div><br>';
+*/
+
+?>
+
+                        </div>
+                </div>
+        </article>
+</div>
+
+
+<div class="post excerpt last">
+                                <FORM><INPUT Type="button" VALUE="Back" onClick="history.go(-1);return true;"></FORM>
+
+            </div>                   </div>
+<footer>
+                <div class="container">
+                        <div class="footer-widgets">
+                                <div class="f-widget"></div>
+                                <div class="f-widget"></div>
+                                <div class="f-widget last">
+                                        <div class="widget"></div>
+                                </div>
+                                <div class="copyrights">
+                                        <div class="row" id="copyright-note">
+                                                <span>ֲ© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
+                                                </span>
+                                        </div>
+                                        <div class="top">
+                                                <a href="#">Back to Top ג†‘</a>
+                                        </div>
+                                </div>
+                        </div>
+                        <!--.footer-widgets-->
+                </div>
+                <!--.container-->
+        </footer>
+        <!--footer-->
+</body>
+</html>
+

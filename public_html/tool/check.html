@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html crossriderapp2258="true"
+	class=" js flexbox no-touch rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio"
+	dir="ltr" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+
+<title>Alma Migration Team</title>
+
+<!--iOS/android/handheld specific -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" type="text/css" media="all" href="../style.css">
+
+<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+<script src="../js/modernizr.js"></script>
+<script src="../js/customscript.js" type="text/javascript"></script>
+
+<style type="text/css">
+#header h1,#header h2 {
+	text-indent: -999em;
+	min-width: 200px;
+	margin-top: 0;
+}
+
+#header h1 a,#header h2 a {
+	background: url(../images/AMO_Logo.png) no-repeat;
+	min-width: 220px;
+	display: block;
+	min-height: 100px;
+	line-height: 28px;
+}
+}
+</style>
+
+<script>
+	/* Script written by Adam Khoury @ DevelopPHP.com */
+	/* Video Tutorial: http://www.youtube.com/watch?v=EraNFJiY0Eg */
+	function _(el) {
+		return document.getElementById(el);
+	}
+	function uploadFile() {
+		var file = _("file1").files[0];
+		 //alert(file.name+" | "+file.size+" | "+file.type);
+		var formdata = new FormData();
+		formdata.append("file1", file);
+		var ajax = new XMLHttpRequest();
+		ajax.upload.addEventListener("progress", progressHandler, false);
+		ajax.addEventListener("load", completeHandler, false);
+		ajax.addEventListener("error", errorHandler, false);
+		ajax.addEventListener("abort", abortHandler, false);
+		ajax.open("POST", "file_upload_parser.php");
+		ajax.send(formdata);
+	}
+	function progressHandler(event) {
+		_("loaded_n_total").innerHTML = "Uploaded " + event.loaded
+				+ " bytes of " + event.total;
+		var percent = (event.loaded / event.total) * 100;
+		_("progressBar").value = Math.round(percent);
+		_("status").innerHTML = Math.round(percent)
+				+ "% uploaded... please wait";
+	}
+	function completeHandler(event) {
+		_("status").innerHTML = event.target.responseText;
+		_("progressBar").value = 0;
+	}
+	function errorHandler(event) {
+		_("status").innerHTML = "Upload Failed";
+	}
+	function abortHandler(event) {
+		_("status").innerHTML = "Upload Aborted";
+	}
+
+	function getvalueFromDropdown() {
+
+		if (document.getElementById('migEnv')) {
+			alert(document.getElementById('migEnv').value);
+			var option = document.getElementById('migEnv').value;
+		}
+
+	}
+
+
+$('#clickme').click(function () {
+    var me = $('.progress .bar');
+    var perc = me.attr("data-percentage");
+    var sec = me.attr("data-second") * 1000;
+    var each = sec / perc;
+    var current_perc = 0;
+
+    me.css('width', '100%');
+    me.text('Loading..');
+
+    setTimeout(function () {    // Do something after 5 seconds
+        var progress = setInterval(function () {
+            if (current_perc >= perc) {
+                clearInterval(progress);
+            } else {
+                current_perc += 1;
+                me.css('width', (current_perc) + '%');
+            }
+
+            me.text((current_perc) + '%');
+
+        }, each);
+    }, 2000);
+});
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+
+<?php
+
+
+	//$output_rmLastFiles = shell_exec('rm ./uploads/*');
+
+?>
+
+
+	<header class="main-header">
+		<div class="container">
+			<div id="header">
+				<h1 id="logo">
+					<a href="http://il-almaimp01/~amirc/">Alma Migration Operations</a>
+				</h1>
+				<!-- END #logo -->
+			</div>
+			<!--#header-->
+		</div>
+		<!--.container-->
+	</header>
+
+	<div class="container">
+		<div class="secondary-navigation">
+			<nav id="navigation">
+				<ul class="menu">
+					<li class="menu-item"><a href="http://il-spapp01/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx">Migration Calendar</a></li>
+					<li class="menu-item"><a href="http://il-almabuild01:8080/examples/AlmaInstitutionList/" target="_blank">Instituions List</a></li>
+					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc04.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins NA</a></li>
+					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc03.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins EU</a></li>
+					<li class="menu-item"><a href="http://10.32.76.52:8080/" target="_blank">Jenkins APAC</a></li>
+					<li class="menu-item"><a href="http://il-mona/login" target="_blank">Mona</a></li>
+				</ul>
+
+			</nav>
+		</div>
+	</div>
+
+	<div id="page">
+		<div class="content">
+			<article class="article">
+				<div id="content_box">
+
+
+					<div class="post excerpt ">
+
+						<form id="upload_form" enctype="multipart/form-data" method="post" action="process.html">
+							<b>
+								<p>Please upload your customer's Delivered Files List and compare</p>
+								<p>it against customer's source files and the mig environment properties:</p>
+							</b>
+							<input type="file" name="file1" id="file1"><br>
+
+								<input type="button" value="Upload Deilvered Files List" onclick="uploadFile()">
+								<progress id="progressBar" value="0" max="100" style="width: 200px;"></progress>
+								<h3 id="status"></h3>
+								<p id="loaded_n_total"></p>
+
+					</div>
+
+
+
+				</div>
+				<!--.post excerpt-->
+
+				<div class="post excerpt ">
+					<header>
+						<div class="container">
+							<b>Select Migration Server:</b>
+							<ul>
+								<li class="dropdown">
+									<ul class="dropdown-menu">
+										<!--  <form method="post" action="process.html"> -->
+											<select id="migEnv" name="migEnv">
+
+												<li><option value="-1">--Please Select Mig Server--</option></li>
+												<li><option value="mig01.impl.alma.dc04.hosted.exlibrisgroup.com">Mig01 DC04</option></li>
+												<li><option value="mig02.impl.alma.dc04.hosted.exlibrisgroup.com">Mig02 DC04</option></li>
+												<li><option value="mig03.impl.alma.dc04.hosted.exlibrisgroup.com">Mig03 DC04</option></li>
+												<li><option value="mig04.impl.alma.dc04.hosted.exlibrisgroup.com">Mig04 DC04</option></li>
+												<li><option value="mig05.impl.alma.dc04.hosted.exlibrisgroup.com">Mig05 DC04</option></li>
+												<li><option value="mig01.impl.alma.dc03.hosted.exlibrisgroup.com">Mig01 DC03</option></li>
+												<li><option value="mig02.impl.alma.dc03.hosted.exlibrisgroup.com">Mig02 DC03</option></li>
+												<li><option value="mig03.impl.alma.dc03.hosted.exlibrisgroup.com">Mig03 DC03</option></li>
+												<li><option value="mig04.impl.alma.dc03.hosted.exlibrisgroup.com">Mig04 DC03</option></li>
+												<li><option value="mig05.impl.alma.dc03.hosted.exlibrisgroup.com">Mig05 DC03</option></li>
+												<li><option value="mig01.impl.alma.dc05.hosted.exlibrisgroup.com">Mig01 DC05</option></li>
+												<li><option value="mig02.impl.alma.dc05.hosted.exlibrisgroup.com">Mig02 DC05</option></li>
+
+											</select>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</header>
+					<!--.header-->
+				</div>
+				<!--.post excerpt-->
+
+				<div class="post excerpt ">
+
+							<b>Please enter your Migration Environment:</b>
+							<br>For example: 01calp_inst_testload </br>
+							<input type="text" name="migEnvName">
+
+				</div>
+
+
+				<div class="post excerpt last">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+					<button type="submit">Pre-Migration Checks</button>
+
+					</form>
+
+				</div>
+
+				<div class="post excerpt last">
+
+    			<div style="width: 0%;" data-percentage="60" data-second="20">
+    			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    			<button type="submit">Click</button>
+
+    			</div>
+
+				</div>
+
+
+				<!--.post excerpt-->
+
+				<div class="pnavigation2"></div>
+		</div>
+
+
+		<aside class="sidebar c-4-12">
+			<div id="sidebars" class="g">
+				<div class="sidebar">
+
+
+				</div>
+			</div>
+			<!--sidebars-->
+		</aside>
+
+	</div>
+
+	</div>
+	<!--.container-->
+
+
+
+
+	<footer>
+		<div class="container">
+			<div class="footer-widgets">
+				<div class="f-widget"></div>
+				<div class="f-widget"></div>
+				<div class="f-widget last">
+					<div class="widget"></div>
+				</div>
+				<div class="copyrights">
+					<div class="row" id="copyright-note">
+						<span>© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
+						</span>
+					</div>
+					<div class="top">
+						<a href="#">Back to Top ↑</a>
+					</div>
+				</div>
+			</div>
+			<!--.footer-widgets-->
+		</div>
+		<!--.container-->
+	</footer>
+	<!--footer-->
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+exl_46kth_inst@URM> @bibindex.sql
+**** Hit return to continue ****
+    517570                                                                      
+
+1 row selected.
+
+exl_46kth_inst@URM> spool globalinventoryindex.count
+
