@@ -15,9 +15,7 @@
 
 <link rel="stylesheet" type="text/css" media="all" href="../style.css">
 
-<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+
 
 <script src="../js/modernizr.js"></script>
 <script src="../js/customscript.js" type="text/javascript"></script>
@@ -40,8 +38,7 @@
 </style>
 
 <script>
-	/* Script written by Adam Khoury @ DevelopPHP.com */
-	/* Video Tutorial: http://www.youtube.com/watch?v=EraNFJiY0Eg */
+
 	function _(el) {
 		return document.getElementById(el);
 	}
@@ -113,9 +110,30 @@ $('#clickme').click(function () {
 });
 
 
+  function GoToPreProcess()
+  {
+      form=document.getElementById('upload_form');
+      form.action='preProcess.html';
+      form.submit();
+  }
+  function GoToProcess()
+  {
+      form=document.getElementById('upload_form');
+      form.action='process.html';
+      form.submit();
+  }
+  function GoToPostProcess()
+  {
+      form=document.getElementById('upload_form');
+      form.action='PostProcess.html';
+      form.submit();
+  }
+
+
+
+
+
 </script>
-
-
 
 
 </head>
@@ -126,7 +144,7 @@ $('#clickme').click(function () {
 <?php
 
 
-	//$output_rmLastFiles = shell_exec('rm ./uploads/*');
+	$output_rmLastFiles = shell_exec('rm ./uploads/*');
 
 ?>
 
@@ -148,7 +166,7 @@ $('#clickme').click(function () {
 		<div class="secondary-navigation">
 			<nav id="navigation">
 				<ul class="menu">
-					<li class="menu-item"><a href="http://il-spapp01/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx">Migration Calendar</a></li>
+					<li class="menu-item"><a href="http://intranet/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx" target="_blank">Migration Calendar</a></li>
 					<li class="menu-item"><a href="http://il-almabuild01:8080/examples/AlmaInstitutionList/" target="_blank">Instituions List</a></li>
 					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc04.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins NA</a></li>
 					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc03.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins EU</a></li>
@@ -165,10 +183,10 @@ $('#clickme').click(function () {
 			<article class="article">
 				<div id="content_box">
 
-
 					<div class="post excerpt ">
 
 						<form id="upload_form" enctype="multipart/form-data" method="post" action="process.html">
+
 							<b>
 								<p>Please upload your customer's Delivered Files List and compare</p>
 								<p>it against customer's source files and the mig environment properties:</p>
@@ -181,8 +199,6 @@ $('#clickme').click(function () {
 								<p id="loaded_n_total"></p>
 
 					</div>
-
-
 
 				</div>
 				<!--.post excerpt-->
@@ -216,6 +232,54 @@ $('#clickme').click(function () {
 								</li>
 							</ul>
 						</div>
+
+						<div class="container">
+							<b>After Data was loaded to Alma - Select Implementaion Server</b>
+							<ul>
+								<li class="dropdown">
+									<ul class="dropdown-menu">
+										<!--  <form method="post" action="PostProcess.html"> -->
+											<select id="implServer" name="implServer">
+
+												<li><option value="-1">--Please Select Impl Server--</option></li>
+												<li><option value="aio01.impl.alma.dc04.hosted.exlibrisgroup.com">aio01 DC04</option></li>
+												<li><option value="aio02.impl.alma.dc04.hosted.exlibrisgroup.com">aio02 DC04</option></li>
+												<li><option value="aio03.impl.alma.dc04.hosted.exlibrisgroup.com">aio03 DC04</option></li>
+												<li><option value="aio04.impl.alma.dc04.hosted.exlibrisgroup.com">aio04 DC04</option></li>
+												<li><option value="aio05.impl.alma.dc04.hosted.exlibrisgroup.com">aio05 DC04</option></li>
+												<li><option value="aio06.impl.alma.dc04.hosted.exlibrisgroup.com">aio06 DC04</option></li>
+												<li><option value="aio07.impl.alma.dc04.hosted.exlibrisgroup.com">aio07 DC04</option></li>
+												<li><option value="aio08.impl.alma.dc04.hosted.exlibrisgroup.com">aio08 DC04</option></li>
+												<li><option value="aio09.impl.alma.dc04.hosted.exlibrisgroup.com">aio09 DC04</option></li>
+												<li><option value="aio10.impl.alma.dc04.hosted.exlibrisgroup.com">aio10 DC04</option></li>
+												<li><option value="aio11.impl.alma.dc04.hosted.exlibrisgroup.com">aio11 DC04</option></li>
+												<li><option value="aio12.impl.alma.dc04.hosted.exlibrisgroup.com">aio12 DC04</option></li>
+												<li><option value="aio13.impl.alma.dc04.hosted.exlibrisgroup.com">aio13 DC04</option></li>
+												<li><option value="aio01.impl.alma.dc03.hosted.exlibrisgroup.com">aio01 DC03</option></li>
+												<li><option value="aio02.impl.alma.dc03.hosted.exlibrisgroup.com">aio02 DC03</option></li>
+												<li><option value="aio03.impl.alma.dc03.hosted.exlibrisgroup.com">aio03 DC03</option></li>
+												<li><option value="aio04.impl.alma.dc03.hosted.exlibrisgroup.com">aio04 DC03</option></li>
+												<li><option value="aio05.impl.alma.dc03.hosted.exlibrisgroup.com">aio05 DC03</option></li>
+												<li><option value="aio06.impl.alma.dc03.hosted.exlibrisgroup.com">aio06 DC03</option></li>
+												<li><option value="aio07.impl.alma.dc03.hosted.exlibrisgroup.com">aio07 DC03</option></li>
+												<li><option value="aio08.impl.alma.dc03.hosted.exlibrisgroup.com">aio08 DC03</option></li>
+												<li><option value="aio09.impl.alma.dc03.hosted.exlibrisgroup.com">aio09 DC03</option></li>
+												<li><option value="aio10.impl.alma.dc03.hosted.exlibrisgroup.com">aio10 DC03</option></li>
+												<li><option value="aio11.impl.alma.dc03.hosted.exlibrisgroup.com">aio11 DC03</option></li>
+												<li><option value="aio12.impl.alma.dc03.hosted.exlibrisgroup.com">aio12 DC03</option></li>
+												<li><option value="aio13.impl.alma.dc03.hosted.exlibrisgroup.com">aio13 DC03</option></li>
+												<li><option value="aio01.impl.alma.dc05.hosted.exlibrisgroup.com">aio01 DC05</option></li>
+												<li><option value="aio02.impl.alma.dc05.hosted.exlibrisgroup.com">aio02 DC05</option></li>
+												<li><option value="aio03.impl.alma.dc05.hosted.exlibrisgroup.com">aio03 DC05</option></li>
+												<li><option value="aio04.impl.alma.dc05.hosted.exlibrisgroup.com">aio04 DC05</option></li>
+												<li><option value="aio05.impl.alma.dc05.hosted.exlibrisgroup.com">aio05 DC05</option></li>
+												<li><option value="aio06.impl.alma.dc05.hosted.exlibrisgroup.com">aio06 DC05</option></li>
+
+											</select>
+									</ul>
+								</li>
+							</ul>
+						</div>
 					</header>
 					<!--.header-->
 				</div>
@@ -228,23 +292,27 @@ $('#clickme').click(function () {
 							<input type="text" name="migEnvName">
 
 				</div>
+				<div class="post excerpt First">
 
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+					<button type="submit" onclick="GoToPreProcess();" >Pre-Migration Checks</button>
+
+				<div class="post excerpt ">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+					<button type="submit" onclick="GoToProcess();">Pre and Post Migration Checks</button>
 
 				<div class="post excerpt last">
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-					<button type="submit">Pre-Migration Checks</button>
+					<button type="submit" onclick="GoToPostProcess();">Post Load Migration Checks</button>
+
+
 
 					</form>
 
+
 				</div>
 
-				<div class="post excerpt last">
 
-    			<div style="width: 0%;" data-percentage="60" data-second="20">
-    			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    			<button type="submit">Click</button>
-
-    			</div>
 
 				</div>
 

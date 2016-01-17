@@ -106,7 +106,7 @@
 		<div class="secondary-navigation">
 			<nav id="navigation">
 				<ul class="menu">
-					<li class="menu-item"><a href="http://il-spapp01/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx">Migration Calendar</a></li>
+					<li class="menu-item"><a href="http://intranet/AlmaTS/Lists/Full%20Operations/Migration%20Calendar.aspx" target="_blank">Migration Calendar</a></li>
 					<li class="menu-item"><a href="http://il-almabuild01:8080/examples/AlmaInstitutionList/" target="_blank">Instituions List</a></li>
 					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc04.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins NA</a></li>
 					<li class="menu-item"><a href="http://jenkins01.prod.alma.dc03.hosted.exlibrisgroup.com:8080/" target="_blank">Jenkins EU</a></li>
@@ -125,7 +125,7 @@
 <div id="informationBar" style="width"></div>
 <?php
 // Total processes
-$total = 10;
+$total = 1;
 // Loop through process
 for($i=1; $i<=$total; $i++){
     // Calculate the percentation
@@ -163,7 +163,7 @@ echo '</b>';
 <div id="informationBar2" style="width"></div>
 <?php
 // Total processes
-$total = 10;
+$total = 1;
 // Loop through process
 for($i=1; $i<=$total; $i++){
     // Calculate the percentation
@@ -201,7 +201,7 @@ echo '</b>';
 <div id="informationBar3" style="width"></div>
 <?php
 // Total processes
-$total = 10;
+$total = 1;
 // Loop through process
 for($i=1; $i<=$total; $i++){
     // Calculate the percentation
@@ -242,7 +242,7 @@ echo '</b>';
 <div id="informationBar4" style="width"></div>
 <?php
 // Total processes
-$total = 10;
+$total = 1;
 // Loop through process
 for($i=1; $i<=$total; $i++){
     // Calculate the percentation
@@ -258,7 +258,7 @@ for($i=1; $i<=$total; $i++){
 // This is for the buffer achieve the minimum size in order to flush data
     echo str_repeat(' ',1024*64);
 
-	if ($i == $total -1)
+	if ($i == $total -1 	|| $i == 1)
 	{
 		echo '<br<pre><div id ="loadingImg" align="center" > <img src="loading_anim.gif" height="150" width="150"></div>';
 	}
@@ -317,6 +317,17 @@ echo '</b>';
 	{
 		$HostName = $_POST['migEnv'];
 	}
+	echo "<br>";
+	if  ($_POST['implServer'] != "-1")
+	{
+
+		echo "<b>Implementation Server:      </b>";
+		echo $_POST['implServer'] ;
+	}
+	if  ($_POST['implServer'] != "-1")
+	{
+		$ImplHostName = $_POST['implServer'];
+	}
 
 
 	$envName = $_POST['migEnvName'];
@@ -374,6 +385,7 @@ echo '</b>';
 	cd HOL
 	find . -name '*xml' | wc -l";
 
+/*
 // Items xmls count
 
 	$countItemsXmls = "
@@ -471,7 +483,7 @@ echo '</b>';
 	$connection = ssh2_connect($HostName, 22);
 	ssh2_auth_password($connection, 'urm', 'urm');
 
-
+*/
 	$stream = ssh2_exec($connection, $countProvidedBibs);
 	stream_set_blocking($stream, true);
 	$stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
@@ -491,6 +503,7 @@ echo '</b>';
 	$last_word_bibP = array_pop($pieces);
 
 
+
 	$stream_holdingProvided = ssh2_exec($connection, $countProvidedHoldings);
 	stream_set_blocking($stream_holdingProvided, true);
 	$stream_out_holdingsProvided = ssh2_fetch_stream($stream_holdingProvided, SSH2_STREAM_STDIO);
@@ -501,6 +514,7 @@ echo '</b>';
 
 	//	Count of bib Xmls created by migration:
 
+/*
 
 	$stream_bibXmls = ssh2_exec($connection, $countBibXmls);
 	stream_set_blocking($stream_bibXmls, true);
@@ -580,6 +594,7 @@ echo '</b>';
 	$pieces_fund = explode(':', $fundsX);
 	$last_word_fundX = array_pop($pieces_fund);
 
+*/
 // Get Values from delivered files list:
 
 function varInit()
@@ -610,8 +625,6 @@ $outputVendorsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/script
 $outputFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'funds'");
 $outputP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'p2e'");
 
-
-
 // Get files Names from delivered files list:
 
 $nameBibFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'bibs' 'true'");
@@ -626,7 +639,7 @@ $nameFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/ru
 $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'p2e' 'true'");
 
 
-
+	$ssnameBibFromList = substr($nameBibFromList, 0,8) . "*" . substr($nameBibFromList, -7);
 	$ssNameItemsFromList = substr($nameItemsFromList, 0,8) . "*" . substr($nameItemsFromList, -7);
 	$ssNameFundsFromList = substr($nameFundsFromList, 0,8) . "*" . substr($nameFundsFromList, -7);
 	$ssNameVendosFromList = substr($nameVendorsFromList, 0,8) . "*" . substr($nameVendorsFromList, -7);
@@ -634,213 +647,49 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 	$ssNameLoansFromList = substr($nameLoansFromList, 0,8) . "*" . substr($nameLoansFromList, -7);
 	$ssNameRequestsFromList = substr($nameRequestsFromList, 0,8) . "*" . substr($nameRequestsFromList, -7);
 	$ssNameOrdersFromList = substr($nameOrdersFromList, 0,8) . "*" . substr($nameOrdersFromList, -7);
+	$ssnameP2EFromList = substr($nameP2EFromList, 0,8) . "*" . substr($nameP2EFromList, -7);
 
-/*
 
 
-		echo $nameFundsFromList;
+	$ssnameBibFromList = trim($ssnameBibFromList);
+	$ssNameItemsFromList = trim($ssNameItemsFromList);
+	$ssNameFundsFromList = trim($ssNameFundsFromList);
+	$ssNameVendosFromList = trim($ssNameVendosFromList);
+	$ssNamePatronsFromList = trim($ssNamePatronsFromList);
+	$ssNameLoansFromList = trim($ssNameLoansFromList);
+	$ssNameRequestsFromList = trim($ssNameRequestsFromList);
+	$ssNameOrdersFromList = trim($ssNameOrdersFromList);
+	$ssnameP2EFromList = trim($ssnameP2EFromList);
 
 
+	//$HostName, $fullEnvName
 
-		echo $ssNameFundsFromList;
+// Source files count:
 
-		echo $nameVendorsFromList;
 
-		echo $ssNameVendosFromList;
-*/
-// die;
+	$providedItemsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} ITEM \"{$ssNameItemsFromList}\" csv");
+	$providedPatronsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PATRON \"{$ssNamePatronsFromList}\" csv");
+	$providedVendorsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} VENDOR \"{$ssNameVendosFromList}\" csv");
+	$providedOrdersCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PURCHASEORDER \"{$ssNameOrdersFromList}\" csv");
+	$providedLoansCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} LOAN \"{$ssNameLoansFromList}\" csv");
+	$providedP2ECount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} P2E \"{$ssnameP2EFromList}\" csv");
+	$providedRequestsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} REQUEST \"{$ssNameRequestsFromList}\" csv");
+	$providedFundsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} FUND \"{$ssNameFundsFromList}\" csv");
 
-/*
-		echo $nameFundsFromList;
-		echo $nameP2EFromList;
+// XML files count:
 
+	$XMLItemsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} ITEM \"{$ssNameItemsFromList}\" xml");
+	$XMLPatronsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PATRON \"{$ssNamePatronsFromList}\" xml");
+	$XMLVendorsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} VENDOR \"{$ssNameVendosFromList}\" xml");
+	$XMLOrdersCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PURCHASEORDER \"{$ssNameOrdersFromList}\" xml");
+	$XMLLoansCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} LOAN \"{$ssNameLoansFromList}\" xml");
+	$XMLP2ECount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} P2E \"{$ssnameP2EFromList}\" xml");
+	$XMLRequestsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} REQUEST \"{$ssNameRequestsFromList}\" xml");
+	$XMLFundsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} FUND \"{$ssNameFundsFromList}\" xml");
+	$XMLHolCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} HOL \"{$ssNameFundsFromList}\" xml");
 
-*/
 
-	//	echo "</pre>";
-
-// Source numbers counts
-	// Items
-		$countItemsProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of items provided:'
-    	wc -l {$ssNameItemsFromList}
-		wc -l global*item*csv
-		cd items/
-		wc -l {$ssNameItemsFromList}
-		wc -l global*item*csv";
-
-	// Patrons
-
-		$countPatronsProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Patrons provided:'
-    	wc -l {$ssNamePatronsFromList}";
-
-	// Loans
-
-		$countLoansProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Loans provided:'
-    	wc -l {$ssNameLoansFromList}";
-
-	// Requests
-
-		$countRequestsProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Requests provided:'
-    	wc -l {$ssNameRequestsFromList}";
-
-	// Orders
-
-		$countOrderssProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Orders provided:'
-    	wc -l {$ssNameOrdersFromList}";
-
-	//Funds
-
-		$countfundsProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Funds provided:'
-    	wc -l {$ssNameFundsFromList}";
-
-	//Vendors
-
-		$countvendorsProvided = "
-
-		dinst {$fullEnvName}
-		go input
-    	echo 'Number of Vendor provided:'
-    	wc -l {$ssNameOrdersFromList}";
-
-// items count connections
-
-	$stream_itemsProvided = ssh2_exec($connection, $countItemsProvided);
-	stream_set_blocking($stream_itemsProvided, true);
-	$stream_out_itemsProvided = ssh2_fetch_stream($stream_itemsProvided, SSH2_STREAM_STDIO);
-
-	$itemP = stream_get_contents($stream_out_itemsProvided);
-	$split_itemsProvided = explode(" ", $itemP);
-
-	echo $split_itemsProvided[count($split_itemsProvided)-2];
-
-// patrons count connections
-
-	$stream_patronsProvided = ssh2_exec($connection, $countPatronsProvided);
-	stream_set_blocking($stream_patronsProvided, true);
-	$stream_out_patronsProvided = ssh2_fetch_stream($stream_patronsProvided, SSH2_STREAM_STDIO);
-
-	$patronP = stream_get_contents($stream_out_patronsProvided);
-	$split_patronsProvided = explode(" ", $patronP);
-
-	$arrP = explode(':', $patronP);
-	$finalPatronP = $arrP[1];
-	$split_patronsProvided = explode(" ", $finalPatronP);
-
-// loans count connections
-
-	$stream_loansProvided = ssh2_exec($connection, $countLoansProvided);
-	stream_set_blocking($stream_loansProvided, true);
-	$stream_out_loansProvided = ssh2_fetch_stream($stream_loansProvided, SSH2_STREAM_STDIO);
-
-	$loanP = stream_get_contents($stream_out_loansProvided);
-	$split_loansProvided = explode(" ", $loanP);
-
-	$arrL = explode(':', $loanP);
-	$finalLoanP = $arrL[1];
-	$split_loanssProvided = explode(" ", $finalLoanP);
-
-	//echo "<pre>";
-	//echo $split_loanssProvided[count($split_loanssProvided)-2];
-	//echo "</pre>";
-
-// requests count connections
-
-	$stream_requestsProvided = ssh2_exec($connection, $countRequestsProvided);
-	stream_set_blocking($stream_requestsProvided, true);
-	$stream_out_requestsProvided = ssh2_fetch_stream($stream_requestsProvided, SSH2_STREAM_STDIO);
-
-	$requestP = stream_get_contents($stream_out_requestsProvided);
-	$split_requestProvided = explode(" ", $requestP);
-
-	$arrR = explode(':', $requestP);
-	$finalRequestP = $arrR[1];
-	$split_requestProvided = explode(" ", $finalRequestP);
-
-	//echo "<pre>";
-	//echo $split_requestProvided[count($split_requestProvided)-2];
-	//echo "</pre>";
-
-// orders count connections
-
-	$stream_ordersProvided = ssh2_exec($connection, $countOrderssProvided);
-	stream_set_blocking($stream_ordersProvided, true);
-	$stream_out_ordersProvided = ssh2_fetch_stream($stream_ordersProvided, SSH2_STREAM_STDIO);
-
-	$orderP = stream_get_contents($stream_out_ordersProvided);
-	$split_ordersProvided = explode(" ", $orderP);
-
-	$arrO = explode(':', $orderP);
-	$finalOrderP = $arrO[1];
-	$split_ordersProvided = explode(" ", $finalOrderP);
-
-	//echo "<pre>";
-	//echo $split_ordersProvided[count($split_ordersProvided)-2];
-	//echo "</pre>";
-
-// echo $ssNameFundsFromList;
-
-// funds count connections
-
-	$stream_fundsProvided = ssh2_exec($connection, $countfundsProvided);
-	stream_set_blocking($stream_fundsProvided, true);
-	$stream_out_fundsProvided = ssh2_fetch_stream($stream_fundsProvided, SSH2_STREAM_STDIO);
-
-	$fundP = stream_get_contents($stream_out_fundsProvided);
-	$split_fundsProvided = explode(" ", $fundP);
-
-	$arrF = explode(':', $fundP);
-	$finalFundP = $arrF[1];
-	$split_fundsProvided = explode(" ", $finalFundP);
-
-	//echo "<pre>";
-	//echo $split_fundsProvided[count($split_fundsProvided)-2];
-	//echo "</pre>";
-
-// vendors count connections
-
-	$stream_vendorProvided = ssh2_exec($connection, $countvendorsProvided);
-	stream_set_blocking($stream_vendorProvided, true);
-	$stream_out_vendorsProvided = ssh2_fetch_stream($stream_vendorProvided, SSH2_STREAM_STDIO);
-
-	$vendorP = stream_get_contents($stream_out_vendorsProvided);
-	$split_vendorProvided = explode(" ", $vendorP);
-
-	$arrV = explode(':', $vendorP);
-	$finalVendorP = $arrV[1];
-	$split_vendorProvided = explode(" ", $finalVendorP);
-
-	//echo "<pre>";
-	//echo $split_vendorProvided[count($split_vendorProvided)-2];
-	//echo "</pre>";
-
-//$ssNameVendosFromList
-
-
-//	die;
+	$XMLBibsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} BIB \"{$ssnameBibFromList}\" xml");
 
 // TABLES FINAL SUMMARY
 
@@ -903,7 +752,6 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 </div>
 
 
-
 <div style="width: 325px; float: left;">
 
 
@@ -922,35 +770,35 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
   </tr>
 	<tr>
     	<td>Items</td>
-    	<td>'. $split_itemsProvided[count($split_itemsProvided)-2].'</td>
+    	<td>'. $providedItemsCount.'</td>
   </tr>
 	<tr>
     	<td>Patrons</td>
-    	<td>'. $split_patronsProvided[count($split_patronsProvided)-2].'</td>
+    	<td>'. $providedPatronsCount.'</td>
   </tr>
 	<tr>
     	<td>Loans</td>
-    	<td>'. $split_loanssProvided[count($split_loanssProvided)-2].'</td>
+    	<td>'. $providedLoansCount.'</td>
   </tr>
 	<tr>
     	<td>Requests</td>
-    	<td>'. $split_requestProvided[count($split_requestProvided)-2].'</td>
+    	<td>'. $providedRequestsCount.'</td>
   </tr>
 	<tr>
     	<td>Orders</td>
-    	<td>'. $split_ordersProvided[count($split_ordersProvided)-2].'</td>
+    	<td>'. $providedOrdersCount.'</td>
   </tr>
 	<tr>
     	<td>Funds</td>
-    	<td>'. $split_fundsProvided[count($split_fundsProvided)-2].'</td>
+    	<td>'. $providedFundsCount.'</td>
   </tr>
 	<tr>
     	<td>Vendors</td>
-    	<td>'. $split_vendorProvided[count($split_vendorProvided)-2].'</td>
+    	<td>'. $providedVendorsCount.'</td>
   </tr>
 	<tr>
     	<td>P2E</td>
-    	<td>'. $split_patronsProvided[count($split_patronsProvided)-2].'</td>
+    	<td>'. $providedP2ECount.'</td>
   </tr>
 </table>
 
@@ -964,7 +812,7 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
   </tr>
   <tr>
     	<td>Bib XMLs</td>
-    	<td>'. $last_word_bibX.'</td>
+    	<td>'. $XMLBibsCount.'</td>
   </tr>
   <tr>
     	<td>Holdings XMLs</td>
@@ -972,35 +820,35 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
   </tr>
 	<tr>
     	<td>Items XMLs</td>
-    	<td>'. $last_word_itemX.'</td>
+    	<td>'. $XMLItemsCount.'</td>
   </tr>
 	<tr>
     	<td>Patrons XMLs</td>
-    	<td>'. $last_word_patronX.'</td>
+    	<td>'. $XMLPatronsCount.'</td>
   </tr>
 	<tr>
     	<td>Loans XMLs</td>
-    	<td>'. $last_word_loanX.'</td>
+    	<td>'. $XMLLoansCount.'</td>
   </tr>
 	<tr>
     	<td>Requests XMLs</td>
-   	 	<td>'. $last_word_requestX.'</td>
+   	 	<td>'. $XMLRequestsCount.'</td>
   </tr>
 	<tr>
     	<td>Orders XMLs</td>
-    	<td>'. $last_word_orderX.'</td>
+    	<td>'. $XMLOrdersCount.'</td>
   </tr>
 	<tr>
     	<td>Funds in XMLs</td>
-    	<td>'. $last_word_fundX.'</td>
+    	<td>'. $XMLFundsCount.'</td>
   </tr>
 	<tr>
     	<td>Vendors</td>
-    	<td></td>
+    	<td>'. $XMLVendorsCount.'</td>
   	</tr>
 	<tr>
     	<td>P2E records</td>
-    	<td></td>
+    	<td>'. $XMLP2ECount.'</td>
   </tr>
 
 </table>
@@ -1133,31 +981,11 @@ fclose($sessionfile);
 </div>
 
 <div class="post excerpt last">
-				<FORM><INPUT Type="button" VALUE="Back" onClick="history.go(-1);return true;"></FORM>
+				<div>
+				<FORM><button Type="button" VALUE="Back" onClick="history.go(-1);return true;"> Go Back to Form page</button></FORM>
 				</div>
-<footer>
-		<div class="container">
-			<div class="footer-widgets">
-				<div class="f-widget"></div>
-				<div class="f-widget"></div>
-				<div class="f-widget last">
-					<div class="widget"></div>
-				</div>
-				<div class="copyrights">
-					<div class="row" id="copyright-note">
-						<span>ֲ© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
-						</span>
-					</div>
-					<div class="top">
-						<a href="#">Back to Top ג†‘</a>
-					</div>
-				</div>
-			</div>
-			<!--.footer-widgets-->
-		</div>
-		<!--.container-->
-	</footer>
-	<!--footer-->
+</div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
@@ -1171,5 +999,34 @@ fclose($sessionfile);
 	 	$("#progressBar4").hide()
 	 	$("#loadingImg").hide()
 </script>
+</body>
+</html>
+
+
+
+	<footer>
+		<div class="container">
+			<div class="footer-widgets">
+				<div class="f-widget"></div>
+				<div class="f-widget"></div>
+				<div class="f-widget last">
+					<div class="widget"></div>
+				</div>
+				<div class="copyrights">
+					<div class="row" id="copyright-note">
+						<span>© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
+						</span>
+					</div>
+					<div class="top">
+						<a href="#">Back to Top ↑</a>
+					</div>
+				</div>
+			</div>
+			<!--.footer-widgets-->
+		</div>
+		<!--.container-->
+	</footer>
+	<!--footer-->
+
 </body>
 </html>
