@@ -8,16 +8,14 @@
 
 <title>Alma Migration Team</title>
 
+<!--iOS/android/handheld specific -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<<<<<<< HEAD
 <link rel="stylesheet" type="text/css" media="all" href="../style.css">
 
 
-=======
->>>>>>> origin/master
 
 <script src="../js/modernizr.js"></script>
 <script src="../js/customscript.js" type="text/javascript"></script>
@@ -40,11 +38,7 @@
 </style>
 
 <script>
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	function _(el) {
 		return document.getElementById(el);
 	}
@@ -115,13 +109,13 @@ $('#clickme').click(function () {
     }, 2000);
 });
 
-
-  function GoToPreProcess()
-  {
+	function GoToPreProcess()
+  	{
       form=document.getElementById('upload_form');
       form.action='preProcess.html';
       form.submit();
-  }
+  	}
+
   function GoToProcess()
   {
       form=document.getElementById('upload_form');
@@ -137,24 +131,27 @@ $('#clickme').click(function () {
 
 
 
-
-
 </script>
-
-
+<script src="jquery.js"></script>
+<script src="jquery.lazyload.js"></script>
+	<script>
+				function postYourAdd () {
+				    var iframe = $("#forPostyouradd");
+				    iframe.attr("src", iframe.data("src"));
+				}
+				function postYourAdd2 () {
+				    var iframe = $("#forPostyouradd2");
+				    iframe.attr("src", iframe.data("src"));
+				}
+				</script>
 </head>
 
 <body>
 
-
 <?php
-
-
 	$output_rmLastFiles = shell_exec('rm ./uploads/*');
 
 ?>
-
-
 	<header class="main-header">
 		<div class="container">
 			<div id="header">
@@ -182,20 +179,19 @@ $('#clickme').click(function () {
 
 			</nav>
 		</div>
+
+
 	</div>
+<form action ="preProcess.html" id="upload_form" enctype="multipart/form-data" method="post" target="search_iframe" >
 
-	<div id="page">
-		<div class="content">
-			<article class="article">
+		<div class="content" style="margin-top: 70px; margin-left: 100px; top: 13%; align: center; width: 27%; height: 100%; position: absolute; ">
+			<article class="article" style="align: absoulte;">
 				<div id="content_box">
-
 					<div class="post excerpt ">
 
-						<form id="upload_form" enctype="multipart/form-data" method="post" action="process.html">
 
 							<b>
-								<p>Please upload your customer's Delivered Files List and compare</p>
-								<p>it against customer's source files and the mig environment properties:</p>
+								<p>Please upload your customer's Delivered Files List:</p>
 							</b>
 							<input type="file" name="file1" id="file1"><br>
 
@@ -203,13 +199,13 @@ $('#clickme').click(function () {
 								<progress id="progressBar" value="0" max="100" style="width: 200px;"></progress>
 								<h3 id="status"></h3>
 								<p id="loaded_n_total"></p>
+					</div>
+					<div>
 
 					</div>
-
 				</div>
 				<!--.post excerpt-->
-
-				<div class="post excerpt ">
+				<div class="post excerpt" style="margin-top:-10px;">
 					<header>
 						<div class="container">
 							<b>Select Migration Server:</b>
@@ -289,66 +285,189 @@ $('#clickme').click(function () {
 					</header>
 					<!--.header-->
 				</div>
+				<?php
+
+$db = new PDO('sqlite:calendar');
+$inst_list = $db->query("select DISTINCT CustomerCode, InstitutionCode from CalendarMain")->fetchAll(PDO::FETCH_COLUMN,1);
+
+$output = implode(",",$inst_list);
+
+//echo '{"inst_list":"'     . $output       .'"}';
+
+
+?>
+
+<style type="text/css">
+
+.search_frame
+{
+       border: 1px;
+       width: 99%;
+       height: 200%;
+}
+.cust_table  {border-collapse:collapse;border-spacing:0;float: left;margin: 2em;}
+.cust_table td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.cust_table th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+</style>
+  <script>
+  $.get('/home/amirc/public_html/tool/scripts/test.csv',function(data) {
+	   if (data == "ON") {
+	       var result = $.csv.toArrays(data);
+
+	   } else {
+	       //there is an error reading the file
+	   }
+	});
+  $(function() {
+
+	  var availableTags = <?php echo '["' . implode('", "', $inst_list) . '"]' ?>;
+
+    $( "#tags" ).autocomplete({ source: availableTags });
+
+    $(document).ready(function () {
+        $('#tags').on('autocompletechange change', function ()
+        		{
+            		$('#tagsname').html('You selected: ' + this.value);
+        		}).change();
+
+    });
+
+  });
+  </script>
 				<!--.post excerpt-->
 
-				<div class="post excerpt ">
+				<script language="javascript">
+
+				var e = document.getElementById("migEnv");
+				var strUser = e.options[e.selectedIndex].value;
+
+				<!--
+				</script>
+				<?php
+
+				$fullEnvName = $_POST['instName'];
+
+
+				?>
+
+
+
+				<div class="post excerpt " style="margin-top:-40px;">
 
 							<b>Please enter your Migration Environment:</b>
 							<br>For example: 01calp_inst_testload </br>
-							<input type="text" name="migEnvName">
-
-				</div>
-				<div class="post excerpt First">
-
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-					<button type="submit" onclick="GoToPreProcess();" >Pre-Migration Checks</button>
-
-				<div class="post excerpt ">
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-					<button type="submit" onclick="GoToProcess();">Pre and Post Migration Checks</button>
-
-				<div class="post excerpt last">
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-					<button type="submit" onclick="GoToPostProcess();">Post Load Migration Checks</button>
-
-
-
-					</form>
-
+							<input type="text" name="migEnvName" value="<?php echo $fullEnvName; ?>">
 
 				</div>
 
 
 
+				<div class="post excerpt "  style="margin-top:-25px;">
+
+							<b>Please enter Insitution ID:</b>
+							<br>For example: 2901 </br>
+							<input type="text" name="instID" id="tags">
+
+				</div>
+
+				<div class="post excerpt First" style="margin-top:-15px;">
+
+
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+						<button class="preButton" id="preButton" value="submit" name="preButton"  onclick="GoToPreProcess();">Pre-Migration Checks</button>
+				</div>
+					<div class="post excerpt " style="margin-top:-20px;">
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+						<button class="Button" id="Button" type="submit" name="Button" onclick="GoToProcess();">Pre and Post Migration Checks</button>
+
+					<div class="post excerpt last" style="margin-top:10px;">
+					<button class="postButton" id="postButton" type="submit" name="postButton" onclick="GoToPostProcess();">Post Load Migration Checks</button>
+
+
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+					<script>
+
+
+					</script>
+					<!--
+					<script>
+
+					$(".preButton").click(function() {
+						$('form').get(0).setAttribute('preButton', 'submit');
+					});
+					$(".Button").click(function() {
+					    $(this).closest("form").attr("action", "process.html");
+					});
+					$(".postButton").click(function() {
+					    $(this).closest("form").attr("action", "PostProcess.html");
+					});
+
+					$("form").on("submit", function () {
+					    alert($(this).attr("action"));
+					});
+					</script>
+					 -->
+
+
+					</div>
 				</div>
 
 
-				<!--.post excerpt-->
-
-				<div class="pnavigation2"></div>
+				</article>
 		</div>
 
+	</form>
 
-		<aside class="sidebar c-4-12">
-			<div id="sidebars" class="g">
-				<div class="sidebar">
+	<div style="margin-left: 500px; width:60%; align:center">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+				<iframe name="search_iframe" class="forPostyouradd" id="forPostyouradd"  data-src="null" src="about:blank" width="100%" height="830px" ></iframe>
+				<script type="text/javascript">
+				var submitForm = function(method)
+				{
+					if (method == "preButton")
+						{
+							var formAction = "preProcess.html";
+						}
+					if (method =="Button")
+						{
+							var formAction = "process.html";
+						}
+					if (method =="preButton")
+						{
+						var formAction = "PostProcess.html";
+						}
+
+				    $('#upload_form').attr('action', formAction);
+				    //submit form
+				    $('#upload_form').submit();
+				};
+
+				$(document)
+				.on('click', '#preButton', function(){
+				    //set your method - delete
+				    submitForm('preButton');
+				})
+				.on('click', '#Button', function(){
+				    //set your method - delete
+				    submitForm('Button');
+				})
+				.on('click', '#postButton', function(){
+				    //set your method - delete
+				    submitForm('postButton');
+				})
 
 
-				</div>
-			</div>
-			<!--sidebars-->
-		</aside>
+					});
+
+				</script>
 
 	</div>
 
-	</div>
 	<!--.container-->
 
-
-
-
-	<footer>
-		<div class="container">
+	<footer style="top:115px">
+		<div class="container" >
 			<div class="footer-widgets">
 				<div class="f-widget"></div>
 				<div class="f-widget"></div>
@@ -357,11 +476,11 @@ $('#clickme').click(function () {
 				</div>
 				<div class="copyrights">
 					<div class="row" id="copyright-note">
-						<span>© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
+						<span>ֲ© 2015 </span> - <span>Amir Cohen<a href="http://il-almaimp01/~amirc/"> AMO TEAM SITE</a>.
 						</span>
 					</div>
 					<div class="top">
-						<a href="#">Back to Top ↑</a>
+						<a href="#">Back to Top ג†‘</a>
 					</div>
 				</div>
 			</div>
@@ -372,4 +491,5 @@ $('#clickme').click(function () {
 	<!--footer-->
 
 </body>
+
 </html>

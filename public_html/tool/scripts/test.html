@@ -1,0 +1,75 @@
+<html>
+<head>
+<script src="jquery-latest.min.js"></script>
+<script src="jquery-ui.js"></script>
+<link rel="stylesheet" href="jquery-ui.css">
+
+  <style>
+  .ui-progressbar {
+    position: relative;
+    height: 30px;
+    margin: 1px 1px 1px 15em;
+    position: relative;
+    width: 50%;
+  }
+  .progress-label1 {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+  </style>
+
+  <script>
+  $(function()
+{
+    var progressbar = $( "#progressbar1" ),
+      progressLabel = $( ".progress-label1" );
+
+    progressbar.progressbar({
+      value: false,
+      change: function() {
+        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+      },
+      complete: function() {
+        progressLabel.text( "Complete!" );
+        $( ".loadInd1" ).show();
+      }
+    });
+
+
+    function progress()
+    {
+      var val = progressbar.progressbar( "value" ) || 0;
+
+      progressbar.progressbar( "value", val + 1 );
+
+      if ( val < 99 )
+      {
+        setTimeout( progress, 280 );
+      }
+    }
+
+    setTimeout( progress, 50 );
+  });
+  </script>
+</head>
+<body>
+
+
+
+<script type="text/javascript">
+$('.calendarUpdate').load('auto_calendar_update.php');
+</script>
+
+<div class='calendarUpdate'>Preparing to calendar update</div>
+
+<div id="progressbar1"><div class="progress-label1">Loading...</div></div>
+
+
+
+
+</body>
+</html>
+

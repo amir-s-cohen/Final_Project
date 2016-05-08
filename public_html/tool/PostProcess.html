@@ -88,17 +88,18 @@
 <body>
 
 
+<!--
 <header class="main-header">
 		<div class="container">
 			<div id="header">
 				<h1 id="logo">
 					<a href="http://il-almaimp01/~amirc/">Alma Migration Operations</a>
 				</h1>
-				<!-- END #logo -->
+
 			</div>
-			<!--#header-->
+
 		</div>
-		<!--.container-->
+
 	</header>
 
 
@@ -117,3 +118,721 @@
 			</nav>
 		</div>
 	</div>
+-->
+
+	<div  style="width:450px; height:200px; position:absolute; top: 20%; left: 15%; margin-top: -100px; margin-left: -100px;">
+
+<div id="progressBar" align="left" style="width:500px; border:5px solid #888888;"></div>
+<!-- Progress information -->
+<div id="informationBar" style="width"></div>
+<?php
+// Total processes
+$total = 2;
+// Loop through process
+for($i=1; $i<=$total; $i++){
+    // Calculate the percentation
+    $percent = intval($i/$total * 100)."%";
+
+    // Javascript for updating the progress bar and information
+    echo '<script language="javascript">
+    document.getElementById("progressBar").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
+    document.getElementById("informationBar").innerHTML="'.$i.' XMLs directories are being counted. ";
+    </script>';
+
+
+// This is for the buffer achieve the minimum size in order to flush data
+    echo str_repeat(' ',1024*64);
+
+
+// Send output to browser immediately
+    flush();
+
+
+// Sleep one second so we can see the delay
+    sleep(1);
+}
+// Tell user that the process is completed
+echo '</b>';
+echo '<script language="javascript">document.getElementById("informationBar").innerHTML="Process completed"</script>';
+echo '</b>';
+?>
+</div>
+
+<div  style="width:450px; height:200px; position:absolute; top: 30%; left: 15%; margin-top: -100px; margin-left: -100px;">
+
+<div id="progressBar2" align="left" style="width:500px; border:5px solid #888888;"></div>
+<!-- Progress information -->
+<div id="informationBar2" style="width"></div>
+<?php
+// Total processes
+$total = 2;
+// Loop through process
+for($i=1; $i<=$total; $i++){
+    // Calculate the percentation
+    $percent = intval($i/$total * 100)."%";
+
+    // Javascript for updating the progress bar and information
+    echo '<script language="javascript">
+    document.getElementById("progressBar2").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
+    document.getElementById("informationBar2").innerHTML="'.$i.' Alma areas are being counted.";
+    </script>';
+
+
+// This is for the buffer achieve the minimum size in order to flush data
+    echo str_repeat(' ',1024*64);
+
+
+// Send output to browser immediately
+    flush();
+
+
+// Sleep one second so we can see the delay
+    sleep(1);
+}
+// Tell user that the process is completed
+echo '</b>';
+echo '<script language="javascript">document.getElementById("informationBar2").innerHTML="Process completed"</script>';
+echo '</b>';
+?>
+</div>
+
+<div  style="width:450px; height:200px; position:absolute; top: 40%; left: 15%; margin-top: -100px; margin-left: -100px;">
+
+<div id="progressBar4" align="left" style="width:500px; border:5px solid #888888;"></div>
+<!-- Progress information -->
+<div id="informationBar4" style="width"></div>
+<?php
+// Total processes
+$total = 2;
+// Loop through process
+for($i=1; $i<=$total; $i++){
+    // Calculate the percentation
+    $percent = intval($i/$total * 100)."%";
+
+    // Javascript for updating the progress bar and information
+    echo '<script language="javascript">
+    document.getElementById("progressBar4").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
+    document.getElementById("informationBar4").innerHTML="Generating Post Load report. This could take a few minutes.";
+    </script>';
+
+
+// This is for the buffer achieve the minimum size in order to flush data
+    echo str_repeat(' ',1024*64);
+
+	if ($i == $total -1 	|| $i == 1)
+	{
+		echo '<br<pre><div id ="loadingImg" align="center" > <img src="loading_anim.gif" height="150" width="150"></div>';
+	}
+// Send output to browser immediately
+    flush();
+
+
+// Sleep one second so we can see the delay
+    sleep(1);
+
+
+}
+
+// Tell user that the process is completed
+echo '</b>';
+echo '<script language="javascript">document.getElementById("informationBar4").innerHTML="Process completed"</script>';
+echo '</b>';
+?>
+</div>
+
+<div id="page">
+		<div class="content">
+			<article class="article" >
+				<div id="content_box" style="padding:1300;width: 1200px;">
+
+
+					<div class="post excerpt ">
+
+
+<?php
+	session_start( );
+
+	set_include_path(get_include_path() . PATH_SEPARATOR . '../Classes/');
+	include '../Classes/PHPExcel/IOFactory.php';
+
+	echo '<font size="6" color="black"><b>Post Load - Migration Report</b></font>';
+
+	echo "<br><br>";
+
+
+	if  ($_POST['migEnvName'] != "")
+	{
+		echo "<b>Migration Environment: </b>";
+		echo $_POST['migEnvName'];
+		$fullEnvName = $_POST['migEnvName'];
+	}
+	echo "<br><br>";
+
+	if  ($_POST['migEnv'] != "-1")
+	{
+
+		echo "<b>Migration Server:      </b>";
+		echo $_POST['migEnv'] ;
+	}
+	if  ($_POST['migEnv'] != "-1")
+	{
+		$HostName = $_POST['migEnv'];
+	}
+	echo "<br>";
+
+	if  ($_POST['implServer'] != "-1")
+	{
+
+		echo "<b>Implementation Server:      </b>";
+		echo $_POST['implServer'] ;
+	}
+	if  ($_POST['implServer'] != "-1")
+	{
+		$ImplHostName = $_POST['implServer'];
+	}
+	echo "<br>";
+	if  ($_POST['instID'] != "-1")
+	{
+
+		echo "<b>InstitutionID:      </b>";
+		echo $_POST['instID'] ;
+	}
+	if  ($_POST['instID'] != "-1")
+	{
+		$inst_id = $_POST['instID'];
+	}
+
+
+
+	$envName = $_POST['migEnvName'];
+	$envName = explode('_', $envName);
+	array_pop($envName);
+	$envName = implode('_', $envName);
+
+	echo "<br><br>";
+
+
+	$output_deliveredFiles = shell_exec('ls -t uploads/ | tail -1');
+
+	exec('cd uploads/ && for file in *; do mv "$file" `echo $file | tr " " "_"` ; done" && cd ../');
+
+		echo "<b>Delivered Fiels List uploaded:</b>";
+		echo "<pre><pre>$output_deliveredFiles</pre></pre>";
+
+
+	$countProvidedBibs = "
+
+	dinst {$fullEnvName}
+	go input
+    echo 'Number of bibs provided:'
+    mrcstat *bib*mrc | grep Overall
+	mrcstat *bib*out| grep Overall";
+
+	$countProvidedHoldings = "
+
+	dinst {$fullEnvName}
+	go input
+    echo 'Number of Holdings provided:'
+    mrcstat *hol*mrc | grep Overall
+	mrcstat *hol*out| grep Overall";
+
+	//mrcstat *Hol*mrc | grep Overall
+	//mrcstat *Hol*out | grep Overall";
+
+// Bib xmls count
+
+	$countBibXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of bib XMLs created:'
+	cd BIB
+	find . -name '*xml' | wc -l";
+
+// Holdings xmls count
+
+	$countHoldingsXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Holdings XMLs created:'
+	cd HOL
+	find . -name '*xml' | wc -l";
+
+/*
+// Items xmls count
+
+	$countItemsXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Items XMLs created:'
+	cd ITEM
+	find . -name '*xml' | wc -l";
+
+// Patron xmls Count
+
+	$countPatronsXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Patrons XMLs created:'
+	cd PATRON
+	find . -name '*xml' | wc -l";
+
+	$countBibBoundWith = "
+	dinst {$fullEnvName}
+	go input
+	grep bw global_boundwith.csv | wc -l";
+
+// Loan xmls Count
+
+	$countLoansXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Loans XMLs created:'
+	cd LOAN
+	find . -name '*xml' | wc -l";
+
+	$countBibBoundWith = "
+	dinst {$fullEnvName}
+	go input
+	grep bw global_boundwith.csv | wc -l";
+
+// Requests xmls Count
+
+	$countRequestXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Request XMLs created:'
+	cd REQUEST
+	find . -name '*xml' | wc -l";
+
+// Orders xmls Count
+
+	$countOrdersXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Orders XMLs created:'
+	cd PURCHASEORDER
+	find . -name '*xml' | wc -l";
+
+// Orders xmls Count
+
+	$countOrdersXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Orders XMLs created:'
+	cd PURCHASEORDER
+	find . -name '*xml' | wc -l";
+
+// Funds Count
+
+	$countFundsXmls = "
+
+	dinst {$fullEnvName}
+	go output
+	echo 'Number of Funds XMLs created:'
+	cd FUNDS
+	grep code * | grep -v INST | wc -l";
+
+
+// Boundwith count
+
+	$countBibBoundWith = "
+	dinst {$fullEnvName}
+	go input
+	grep bw global_boundwith.csv | wc -l";
+
+
+	$countBibRejected = "
+	dinst {$fullEnvName}
+	go report
+	wc -l bib_rejected* | grep total";
+
+	$connection = ssh2_connect($HostName, 22);
+	ssh2_auth_password($connection, 'urm', 'urm');
+
+*/
+	$stream = ssh2_exec($connection, $countProvidedBibs);
+	stream_set_blocking($stream, true);
+	$stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
+
+	/*
+	echo "<b> Count of bibs Provided by customer </b><br>";
+
+		echo "<pre>";
+		print stream_get_contents($stream_out,6,2);
+		echo "</pre>";
+	*/
+
+
+
+	$bibP = stream_get_contents($stream_out);
+	$pieces = explode(':', $bibP);
+	$last_word_bibP = array_pop($pieces);
+
+
+
+	$stream_holdingProvided = ssh2_exec($connection, $countProvidedHoldings);
+	stream_set_blocking($stream_holdingProvided, true);
+	$stream_out_holdingsProvided = ssh2_fetch_stream($stream_holdingProvided, SSH2_STREAM_STDIO);
+
+	$holP = stream_get_contents($stream_out_holdingsProvided);
+	$pieces = explode(':', $holP);
+	$last_word_holP = array_pop($pieces);
+
+	//	Count of bib Xmls created by migration:
+
+/*
+
+	$stream_bibXmls = ssh2_exec($connection, $countBibXmls);
+	stream_set_blocking($stream_bibXmls, true);
+	$stream_out_bibXmls = ssh2_fetch_stream($stream_bibXmls, SSH2_STREAM_STDIO);
+
+	$bibX = stream_get_contents($stream_out_bibXmls);
+	$pieces = explode(':', $bibX);
+	$last_word_bibX = array_pop($pieces);
+
+	// count of Holdings Xmls created:
+
+	$stream_holdingsXmls = ssh2_exec($connection, $countHoldingsXmls);
+	stream_set_blocking($stream_holdingsXmls, true);
+	$stream_out_holdingsXmls = ssh2_fetch_stream($stream_holdingsXmls, SSH2_STREAM_STDIO);
+
+	$holX = stream_get_contents($stream_out_holdingsXmls);
+	$pieces_hol = explode(':', $holX);
+	$last_word_holX = array_pop($pieces_hol);
+
+	// count of Items Xmls created:
+
+	$stream_itemssXmls = ssh2_exec($connection, $countItemsXmls);
+	stream_set_blocking($stream_itemssXmls, true);
+	$stream_out_itemsXmls = ssh2_fetch_stream($stream_itemssXmls, SSH2_STREAM_STDIO);
+
+	$itemX = stream_get_contents($stream_out_itemsXmls);
+	$pieces_item = explode(':', $itemX);
+	$last_word_itemX = array_pop($pieces_item);
+
+	// count of Patrons Xmls created:
+
+	$stream_patronXmls = ssh2_exec($connection, $countPatronsXmls);
+	stream_set_blocking($stream_patronXmls, true);
+	$stream_out_patronsXmls = ssh2_fetch_stream($stream_patronXmls, SSH2_STREAM_STDIO);
+
+	$patronX = stream_get_contents($stream_out_patronsXmls);
+	$pieces_patron = explode(':', $patronX);
+	$last_word_patronX = array_pop($pieces_patron);
+
+	// count of Loans Xmls created:
+
+	$stream_loanXmls = ssh2_exec($connection, $countLoansXmls);
+	stream_set_blocking($stream_loanXmls, true);
+	$stream_out_loansXmls = ssh2_fetch_stream($stream_loanXmls, SSH2_STREAM_STDIO);
+
+	$loanX = stream_get_contents($stream_out_loansXmls);
+	$pieces_loan = explode(':', $loanX);
+	$last_word_loanX = array_pop($pieces_loan);
+
+// count of Requests Xmls created:
+
+	$stream_requestXmls = ssh2_exec($connection, $countRequestXmls);
+	stream_set_blocking($stream_requestXmls, true);
+	$stream_out_requestsXmls = ssh2_fetch_stream($stream_requestXmls, SSH2_STREAM_STDIO);
+
+	$requestX = stream_get_contents($stream_out_requestsXmls);
+	$pieces_request = explode(':', $requestX);
+	$last_word_requestX = array_pop($pieces_request);
+
+// count of Orders Xmls created:
+
+	$stream_ordersXmls = ssh2_exec($connection, $countOrdersXmls);
+	stream_set_blocking($stream_requestXmls, true);
+	$stream_out_ordersXmls = ssh2_fetch_stream($stream_ordersXmls, SSH2_STREAM_STDIO);
+
+	$ordersX = stream_get_contents($stream_out_ordersXmls);
+	$pieces_order = explode(':', $ordersX);
+	$last_word_orderX = array_pop($pieces_order);
+
+// count of Funds Xmls created:
+
+	$stream_fundsXmls = ssh2_exec($connection, $countFundsXmls);
+	stream_set_blocking($stream_fundsXmls, true);
+	$stream_out_fundsXmls = ssh2_fetch_stream($stream_fundsXmls, SSH2_STREAM_STDIO);
+
+	$fundsX = stream_get_contents($stream_out_fundsXmls);
+	$pieces_fund = explode(':', $fundsX);
+	$last_word_fundX = array_pop($pieces_fund);
+
+*/
+// Get Values from delivered files list:
+
+function varInit()
+{
+	$outputBibFromList      ="";
+	$outputHoldingsFromList ="";
+	$outputItemsFromList    ="";
+	$outputPatronsFromList  ="";
+	$outputLoansFromList    ="";
+	$outputRequestsFromList ="";
+	$outputOrdersFromList   ="";
+	$outputVendorsFromList  ="";
+	$outputFundsFromList    ="";
+	$outputP2EFromList      ="";
+
+}
+
+varInit();
+
+$outputBibFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'bibs'");
+$outputHoldingsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'holdings'");
+$outputItemsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'items'");
+$outputPatronsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'patrons'");
+$outputLoansFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'loans'");
+$outputRequestsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'requests'");
+$outputOrdersFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'orders'");
+$outputVendorsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'vendors'");
+$outputFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'funds'");
+$outputP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getValues.sh /home/amirc/public_html/tool/uploads/* 'p2e'");
+
+// Get files Names from delivered files list:
+
+$nameBibFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'bibs' 'true'");
+$nameHoldingsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'holdings' 'true'");
+$nameItemsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'items' 'true'");
+$namePatronsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'patrons' 'true'");
+$nameLoansFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'loans' 'true'");
+$nameRequestsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'requests' 'true'");
+$nameOrdersFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'orders' 'true'");
+$nameVendorsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'vendors' 'true'");
+$nameFundsFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'funds' 'true'");
+$nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_compareDelieverdProvided_getNames.sh /home/amirc/public_html/tool/uploads/* 'p2e' 'true'");
+
+
+	$ssnameBibFromList = substr($nameBibFromList, 0,8) . "*" . substr($nameBibFromList, -7);
+	$ssNameItemsFromList = substr($nameItemsFromList, 0,8) . "*" . substr($nameItemsFromList, -7);
+	$ssNameFundsFromList = substr($nameFundsFromList, 0,8) . "*" . substr($nameFundsFromList, -7);
+	$ssNameVendosFromList = substr($nameVendorsFromList, 0,8) . "*" . substr($nameVendorsFromList, -7);
+	$ssNamePatronsFromList = substr($namePatronsFromList, 0,8) . "*" . substr($namePatronsFromList, -7);
+	$ssNameLoansFromList = substr($nameLoansFromList, 0,8) . "*" . substr($nameLoansFromList, -7);
+	$ssNameRequestsFromList = substr($nameRequestsFromList, 0,8) . "*" . substr($nameRequestsFromList, -7);
+	$ssNameOrdersFromList = substr($nameOrdersFromList, 0,8) . "*" . substr($nameOrdersFromList, -7);
+	$ssnameP2EFromList = substr($nameP2EFromList, 0,8) . "*" . substr($nameP2EFromList, -7);
+
+	$ssnameBibFromList = trim($ssnameBibFromList);
+	$ssNameItemsFromList = trim($ssNameItemsFromList);
+	$ssNameFundsFromList = trim($ssNameFundsFromList);
+	$ssNameVendosFromList = trim($ssNameVendosFromList);
+	$ssNamePatronsFromList = trim($ssNamePatronsFromList);
+	$ssNameLoansFromList = trim($ssNameLoansFromList);
+	$ssNameRequestsFromList = trim($ssNameRequestsFromList);
+	$ssNameOrdersFromList = trim($ssNameOrdersFromList);
+	$ssnameP2EFromList = trim($ssnameP2EFromList);
+
+
+	//$HostName, $fullEnvName
+
+
+
+// XML files count:
+
+	$XMLItemsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} ITEM \"{$ssNameItemsFromList}\" xml");
+	$XMLPatronsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PATRON \"{$ssNamePatronsFromList}\" xml");
+	$XMLVendorsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} VENDOR \"{$ssNameVendosFromList}\" xml");
+	$XMLOrdersCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PURCHASEORDER \"{$ssNameOrdersFromList}\" xml");
+	$XMLLoansCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} LOAN \"{$ssNameLoansFromList}\" xml");
+	$XMLP2ECount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} P2E \"{$ssnameP2EFromList}\" xml");
+	$XMLRequestsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} REQUEST \"{$ssNameRequestsFromList}\" xml");
+	$XMLFundsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} FUND \"{$ssNameFundsFromList}\" xml");
+	$XMLHolCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} HOL \"{$ssNameFundsFromList}\" xml");
+	$XMLBibCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} BIB \"{$ssNameFundsFromList}\" xml");
+
+
+// Alma data count:
+
+
+	$AlmaBibCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} BIB '' DB");
+	$AlmaHolCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} HOL '' DB");
+	$AlmaItemCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} ITEM '' DB");
+	$AlmaLoanCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} LOAN '' DB");
+
+
+// TABLES FINAL SUMMARY
+
+
+	echo '<div style="width: 135%; overflow: hidden;">
+
+
+	<div style="width: 325px; float: left;">
+
+
+<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+  <tr>
+    <th><b>Created XMLs</b></th>
+    <th><b>Count</b></th>
+  </tr>
+  <tr>
+    	<td>Bib XMLs</td>
+    	<td>'. $XMLBibsCount.'</td>
+  </tr>
+  <tr>
+    	<td>Holdings XMLs</td>
+    	<td>'. $last_word_holX.'</td>
+  </tr>
+	<tr>
+    	<td>Items XMLs</td>
+    	<td>'. $XMLItemsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Patrons XMLs</td>
+    	<td>'. $XMLPatronsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Loans XMLs</td>
+    	<td>'. $XMLLoansCount.'</td>
+  </tr>
+	<tr>
+    	<td>Requests XMLs</td>
+   	 	<td>'. $XMLRequestsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Orders XMLs</td>
+    	<td>'. $XMLOrdersCount.'</td>
+  </tr>
+	<tr>
+    	<td>Funds in XMLs</td>
+    	<td>'. $XMLFundsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Vendors</td>
+    	<td>'. $XMLVendorsCount.'</td>
+  	</tr>
+	<tr>
+    	<td>P2E records</td>
+    	<td>'. $XMLP2ECount.'</td>
+  </tr>
+
+</table>
+</div>
+
+
+<div style="width: 325px; float: left;">
+
+
+	<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+  <tr>
+    	<th><b>Alma Loaded Data</b></th>
+    	<th><b>Count</b></th>
+  </tr>
+  <tr>
+    	<td>Bibs</td>
+    	<td>'. $AlmaBibCount.'</td>
+  </tr>
+  <tr>
+    	<td>Holdings</td>
+    	<td>'. $AlmaHolCount.'</td>
+  </tr>
+	<tr>
+    	<td>Items</td>
+    	<td>'. $AlmaItemCount.'</td>
+  </tr>
+	<tr>
+    	<td>Patrons</td>
+    	<td></td>
+  </tr>
+	<tr>
+    	<td>Loans</td>
+    	<td>'. $AlmaLoanCount.'</td>
+  </tr>
+	<tr>
+    	<td>Requests</td>
+    	<td>'. $providedRequestsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Orders</td>
+    	<td>'. $providedOrdersCount.'</td>
+  </tr>
+	<tr>
+    	<td>Funds</td>
+    	<td>'. $providedFundsCount.'</td>
+  </tr>
+	<tr>
+    	<td>Vendors</td>
+    	<td>'. $providedVendorsCount.'</td>
+  </tr>
+	<tr>
+    	<td>P2E</td>
+    	<td>'. $providedP2ECount.'</td>
+  </tr>
+</table>';
+
+?>
+						<iframe id="txtArea1" style="display:none"></iframe>
+			<button id="btnExport" onclick="fnExcelReport();"> EXPORT </button>
+
+			</div>
+
+		</div>
+	</article>
+</div>
+
+<div>
+
+<script>
+
+function fnExcelReport()
+{
+    var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+    var textRange; var j=0;
+    tab = document.getElementById('deliveredFilesTable'); // id of table
+
+    for(j = 0 ; j < tab.rows.length ; j++)
+    {
+        tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+        //tab_text=tab_text+"</tr>";
+    }
+
+    tab_text= tab_text+"</table>";
+    tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+    tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html","replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xlsx");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
+}
+
+</script>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+		$("#informationBar").hide()
+	 	$("#progressBar").hide()
+	 	$("#informationBar2").hide()
+	 	$("#progressBar2").hide()
+	 	$("#informationBar4").hide()
+	 	$("#progressBar4").hide()
+	 	$("#loadingImg").hide()
+</script>
+</body>
+</html>
+
+

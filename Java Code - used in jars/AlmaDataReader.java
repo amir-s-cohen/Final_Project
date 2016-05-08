@@ -35,7 +35,7 @@ public class AlmaDataReader implements CountData
     	}
     	else if (areaChecked.contentEquals("ITEM"))
     	{
-    		query = q.countNumOfloans(instid);
+    		query = q.countNumOfItems(instid);
     	}
     	else if (areaChecked.contentEquals("LOAN"))
     	{

@@ -15,7 +15,7 @@ public class AlmaCountQueries
 
 		return qu;
 	}
-	public String countNumOfItemss(String instID)
+	public String countNumOfItems(String instID)
 	{
 		String qu = "SELECT COUNT (*) FROM hdemetadata WHERE objecttype='ITEM' AND institutionid=" + instID + " AND ORIGINATING_SYSTEM_ID IS NOT NULL" ;
 
