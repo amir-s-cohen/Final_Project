@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html class="loading"
-	dir="ltr" lang="en">
+<html class="loading"dir="ltr" lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
@@ -121,6 +120,8 @@
 
 <div  style="width:450px; height:200px; position:absolute; top: 20%; left: 15%; margin-top: -100px; margin-left: -100px;">
 
+
+
 <div id="progressBar" align="left" style="width:500px; border:5px solid #888888;"></div>
 <!-- Progress information -->
 <div id="informationBar" style="width"></div>
@@ -237,7 +238,9 @@ echo '</b>';
 echo '<script language="javascript">document.getElementById("informationBar4").innerHTML="Process completed"</script>';
 echo '</b>';
 ?>
+
 </div>
+<!--
 	<script language="javascript">
 		function WriteToFile()
 		{
@@ -249,7 +252,7 @@ echo '</b>';
 		s.Close();
 		}
 	</script>
-
+ -->
 <div id="page">
 		<div class="content">
 			<article class="article" >
@@ -300,8 +303,6 @@ echo '</b>';
 		$ImplHostName = $_POST['implServer'];
 	}
 
-
-
 	$envName = $_POST['migEnvName'];
 	$envName = explode('_', $envName);
 	array_pop($envName);
@@ -324,7 +325,7 @@ echo '</b>';
 	go input
     echo 'Number of bibs provided:'
     mrcstat *bib*mrc | grep Overall
-	mrcstat *bib*out| grep Overall";
+	mrcstat *bib*out | grep Overall";
 
 	$countProvidedHoldings = "
 
@@ -451,22 +452,23 @@ echo '</b>';
 	dinst {$fullEnvName}
 	go report
 	wc -l bib_rejected* | grep total";
+*/
 
 	$connection = ssh2_connect($HostName, 22);
 	ssh2_auth_password($connection, 'urm', 'urm');
 
-*/
+
 	$stream = ssh2_exec($connection, $countProvidedBibs);
 	stream_set_blocking($stream, true);
 	$stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
 
-	/*
+
 	echo "<b> Count of bibs Provided by customer </b><br>";
 
 		echo "<pre>";
 		print stream_get_contents($stream_out,6,2);
 		echo "</pre>";
-	*/
+
 
 
 
@@ -844,3 +846,4 @@ fclose($sessionfile);
 
 </body>
 </html>
+

@@ -1,5 +1,7 @@
 package com.exlibris.alma_me.test3;
 
+
+// interface for Count Date
 public interface CountData
 {
 	String user="urm";

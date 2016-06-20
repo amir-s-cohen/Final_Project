@@ -20,6 +20,8 @@ public class AlmaDataReader implements CountData
      * @throws Exception
      */
 
+	// Count records in Alma
+
 	public void countFiles(String implServer, String instid, String areaChecked, String file,String type) throws Exception
     {
 

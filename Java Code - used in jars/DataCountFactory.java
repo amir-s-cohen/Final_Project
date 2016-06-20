@@ -1,5 +1,7 @@
 package com.exlibris.alma_me.test3;
 
+// Factory Method
+
 public class DataCountFactory
 {
 	public CountData getCsvCount()

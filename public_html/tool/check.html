@@ -28,7 +28,7 @@
 }
 
 #header h1 a,#header h2 a {
-	background: url(../images/AMO_Logo.png) no-repeat;
+	background: url(../images/AMO-logo-New_big.png) no-repeat;
 	min-width: 220px;
 	display: block;
 	min-height: 100px;
@@ -112,7 +112,7 @@ $('#clickme').click(function () {
 	function GoToPreProcess()
   	{
       form=document.getElementById('upload_form');
-      form.action='preProcess.html';
+      form.action='PreProcess.html';
       form.submit();
   	}
 
@@ -152,11 +152,11 @@ $('#clickme').click(function () {
 	$output_rmLastFiles = shell_exec('rm ./uploads/*');
 
 ?>
-	<header class="main-header">
+	<header class="main-header" style="width:1658px; height:156px">
 		<div class="container">
-			<div id="header">
+			<div id="header" style="margin-top:50px">
 				<h1 id="logo">
-					<a href="http://il-almaimp01/~amirc/">Alma Migration Operations</a>
+					<a href="http://il-almaimp01/~amirc/" style="width:335px; height:135px;">Alma Migration Operations</a>
 				</h1>
 				<!-- END #logo -->
 			</div>
@@ -182,7 +182,9 @@ $('#clickme').click(function () {
 
 
 	</div>
-<form action ="preProcess.html" id="upload_form" enctype="multipart/form-data" method="post" target="search_iframe" >
+
+
+<form action ="PreProcess.html" id="upload_form" enctype="multipart/form-data" method="post" target="search_iframe" >
 
 		<div class="content" style="margin-top: 70px; margin-left: 100px; top: 13%; align: center; width: 27%; height: 100%; position: absolute; ">
 			<article class="article" style="align: absoulte;">
@@ -195,17 +197,20 @@ $('#clickme').click(function () {
 							</b>
 							<input type="file" name="file1" id="file1"><br>
 
-								<input type="button" value="Upload Deilvered Files List" onclick="uploadFile()">
+								<!--  <input type="button" value="Upload Deilvered Files List" onclick="uploadFile()">-->
+
+								<b><button type="button" value="Upload Deilvered Files List" onclick="uploadFile()">UPLOAD DELIVERED FILES LIST</button></b>
 								<progress id="progressBar" value="0" max="100" style="width: 200px;"></progress>
 								<h3 id="status"></h3>
 								<p id="loaded_n_total"></p>
 					</div>
 					<div>
 
+
 					</div>
 				</div>
 				<!--.post excerpt-->
-				<div class="post excerpt" style="margin-top:-10px;">
+				<div class="post excerpt" style="margin-top:-10px">
 					<header>
 						<div class="container">
 							<b>Select Migration Server:</b>
@@ -285,55 +290,8 @@ $('#clickme').click(function () {
 					</header>
 					<!--.header-->
 				</div>
-				<?php
-
-$db = new PDO('sqlite:calendar');
-$inst_list = $db->query("select DISTINCT CustomerCode, InstitutionCode from CalendarMain")->fetchAll(PDO::FETCH_COLUMN,1);
-
-$output = implode(",",$inst_list);
-
-//echo '{"inst_list":"'     . $output       .'"}';
 
 
-?>
-
-<style type="text/css">
-
-.search_frame
-{
-       border: 1px;
-       width: 99%;
-       height: 200%;
-}
-.cust_table  {border-collapse:collapse;border-spacing:0;float: left;margin: 2em;}
-.cust_table td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.cust_table th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-</style>
-  <script>
-  $.get('/home/amirc/public_html/tool/scripts/test.csv',function(data) {
-	   if (data == "ON") {
-	       var result = $.csv.toArrays(data);
-
-	   } else {
-	       //there is an error reading the file
-	   }
-	});
-  $(function() {
-
-	  var availableTags = <?php echo '["' . implode('", "', $inst_list) . '"]' ?>;
-
-    $( "#tags" ).autocomplete({ source: availableTags });
-
-    $(document).ready(function () {
-        $('#tags').on('autocompletechange change', function ()
-        		{
-            		$('#tagsname').html('You selected: ' + this.value);
-        		}).change();
-
-    });
-
-  });
-  </script>
 				<!--.post excerpt-->
 
 				<script language="javascript">
@@ -355,7 +313,7 @@ $output = implode(",",$inst_list);
 				<div class="post excerpt " style="margin-top:-40px;">
 
 							<b>Please enter your Migration Environment:</b>
-							<br>For example: 01calp_inst_testload </br>
+							<br>For example: 01calp_inst_testload
 							<input type="text" name="migEnvName" value="<?php echo $fullEnvName; ?>">
 
 				</div>
@@ -427,7 +385,7 @@ $output = implode(",",$inst_list);
 				{
 					if (method == "preButton")
 						{
-							var formAction = "preProcess.html";
+							var formAction = "PreProcess.html";
 						}
 					if (method =="Button")
 						{
@@ -465,6 +423,14 @@ $output = implode(",",$inst_list);
 	</div>
 
 	<!--.container-->
+<!--
+					<div style="border: 3px solid rgb(201, 0, 1); overflow: hidden; margin: 15px auto; max-width: 736px;">
+
+
+<iframe scrolling="no" src="" style="border: 0px none; margin-left: -185px; height: 859px; margin-top: -533px; width: 926px;">
+</iframe>
+</div>
+ -->
 
 	<footer style="top:115px">
 		<div class="container" >

@@ -21,6 +21,7 @@ public class XMLreader implements CountData
 //        String password="urm";
         String command1 = null;
 
+// implementation of CountFiles
 
         if (type.contentEquals("xml"))
         {

@@ -87,7 +87,6 @@
 </head>
 <body>
 
-
 <!--
 <header class="main-header">
 		<div class="container">
@@ -120,7 +119,7 @@
 	</div>
 -->
 
-	<div  style="width:450px; height:200px; position:absolute; top: 20%; left: 15%; margin-top: -100px; margin-left: -100px;">
+<div  style="width:450px; height:200px; position:absolute; top: 20%; left: 15%; margin-top: -100px; margin-left: -100px;">
 
 <div id="progressBar" align="left" style="width:500px; border:5px solid #888888;"></div>
 <!-- Progress information -->
@@ -136,7 +135,7 @@ for($i=1; $i<=$total; $i++){
     // Javascript for updating the progress bar and information
     echo '<script language="javascript">
     document.getElementById("progressBar").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
-    document.getElementById("informationBar").innerHTML="'.$i.' XMLs directories are being counted. ";
+    document.getElementById("informationBar").innerHTML="'.$i.' Files names and counts being retrieved from delivered files list ";
     </script>';
 
 
@@ -174,7 +173,7 @@ for($i=1; $i<=$total; $i++){
     // Javascript for updating the progress bar and information
     echo '<script language="javascript">
     document.getElementById("progressBar2").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
-    document.getElementById("informationBar2").innerHTML="'.$i.' Alma areas are being counted.";
+    document.getElementById("informationBar2").innerHTML="'.$i.' Source data areas are counted from migration server.";
     </script>';
 
 
@@ -200,7 +199,7 @@ echo '</b>';
 
 <div id="progressBar4" align="left" style="width:500px; border:5px solid #888888;"></div>
 <!-- Progress information -->
-<div id="informationBar4" style="width"></div>
+<div id="informationBar4" style="width"> </div>
 <?php
 // Total processes
 $total = 2;
@@ -212,7 +211,7 @@ for($i=1; $i<=$total; $i++){
     // Javascript for updating the progress bar and information
     echo '<script language="javascript">
     document.getElementById("progressBar4").innerHTML="<div style=\"width:'.$percent.';background-color:#008000;\">&nbsp;</div>";
-    document.getElementById("informationBar4").innerHTML="Generating Post Load report. This could take a few minutes.";
+    document.getElementById("informationBar4").innerHTML="Generating Pre Migration Report Tables. This could take a few minutes.";
     </script>';
 
 
@@ -238,8 +237,20 @@ echo '</b>';
 echo '<script language="javascript">document.getElementById("informationBar4").innerHTML="Process completed"</script>';
 echo '</b>';
 ?>
+<!--
 </div>
-
+	<script language="javascript">
+		function WriteToFile()
+		{
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var s = fso.CreateTextFile("report.txt", true);
+		var text=document.getElementById("tablesDiv").innerText;
+		s.WriteLine(text);
+		s.WriteLine('***********************');
+		s.Close();
+		}
+	</script>
+ -->
 <div id="page">
 		<div class="content">
 			<article class="article" >
@@ -255,7 +266,7 @@ echo '</b>';
 	set_include_path(get_include_path() . PATH_SEPARATOR . '../Classes/');
 	include '../Classes/PHPExcel/IOFactory.php';
 
-	echo '<font size="6" color="black"><b>Post Load - Migration Report</b></font>';
+	echo '<font size="6" color="black"><b>Pre Migration Transformation Report</b></font>';
 
 	echo "<br><br>";
 
@@ -279,8 +290,7 @@ echo '</b>';
 		$HostName = $_POST['migEnv'];
 	}
 	echo "<br>";
-
-	if  ($_POST['implServer'] != "-1")
+		if  ($_POST['implServer'] != "-1")
 	{
 
 		echo "<b>Implementation Server:      </b>";
@@ -290,19 +300,6 @@ echo '</b>';
 	{
 		$ImplHostName = $_POST['implServer'];
 	}
-	echo "<br>";
-	if  ($_POST['instID'] != "-1")
-	{
-
-		echo "<b>InstitutionID:      </b>";
-		echo $_POST['instID'] ;
-	}
-	if  ($_POST['instID'] != "-1")
-	{
-		$inst_id = $_POST['instID'];
-	}
-
-
 
 	$envName = $_POST['migEnvName'];
 	$envName = explode('_', $envName);
@@ -320,12 +317,12 @@ echo '</b>';
 		echo "<pre><pre>$output_deliveredFiles</pre></pre>";
 
 
-	$countProvidedBibs = "
+	$ = "
 
 	dinst {$fullEnvName}
 	go input
     echo 'Number of bibs provided:'
-    mrcstat *bib*mrc | grep Overall
+    mrcstat *mrc | grep Overall
 	mrcstat *bib*out| grep Overall";
 
 	$countProvidedHoldings = "
@@ -453,11 +450,11 @@ echo '</b>';
 	dinst {$fullEnvName}
 	go report
 	wc -l bib_rejected* | grep total";
-*/
+
 	$connection = ssh2_connect($HostName, 22);
 	ssh2_auth_password($connection, 'urm', 'urm');
 
-
+*/
 	$stream = ssh2_exec($connection, $countProvidedBibs);
 	stream_set_blocking($stream, true);
 	$stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
@@ -614,7 +611,6 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 
 	$ssnameBibFromList = substr($nameBibFromList, 0,8) . "*" . substr($nameBibFromList, -7);
-	$ssnameHolsFromList = substr($nameHoldingsFromList, 0,8) . "*" . substr($nameHoldingsFromList, -7);
 	$ssNameItemsFromList = substr($nameItemsFromList, 0,8) . "*" . substr($nameItemsFromList, -7);
 	$ssNameFundsFromList = substr($nameFundsFromList, 0,8) . "*" . substr($nameFundsFromList, -7);
 	$ssNameVendosFromList = substr($nameVendorsFromList, 0,8) . "*" . substr($nameVendorsFromList, -7);
@@ -624,8 +620,9 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 	$ssNameOrdersFromList = substr($nameOrdersFromList, 0,8) . "*" . substr($nameOrdersFromList, -7);
 	$ssnameP2EFromList = substr($nameP2EFromList, 0,8) . "*" . substr($nameP2EFromList, -7);
 
+
+
 	$ssnameBibFromList = trim($ssnameBibFromList);
-	$ssnameHolsFromList = trim($ssnameHolsFromList);
 	$ssNameItemsFromList = trim($ssNameItemsFromList);
 	$ssNameFundsFromList = trim($ssNameFundsFromList);
 	$ssNameVendosFromList = trim($ssNameVendosFromList);
@@ -638,30 +635,17 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 	//$HostName, $fullEnvName
 
+// Source files count:
 
 
-// XML files count:
-
-	$XMLItemsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} ITEM \"{$ssNameItemsFromList}\" xml");
-	$XMLPatronsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PATRON \"{$ssNamePatronsFromList}\" xml");
-	$XMLVendorsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} VENDOR \"{$ssNameVendosFromList}\" xml");
-	$XMLOrdersCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PURCHASEORDER \"{$ssNameOrdersFromList}\" xml");
-	$XMLLoansCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} LOAN \"{$ssNameLoansFromList}\" xml");
-	$XMLP2ECount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} P2E \"{$ssnameP2EFromList}\" xml");
-	$XMLRequestsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} REQUEST \"{$ssNameRequestsFromList}\" xml");
-	$XMLFundsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} FUND \"{$ssNameFundsFromList}\" xml");
-	$XMLHolCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} HOL \"{$ssnameHolsFromList}\" xml");
-	$XMLBibCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} BIB \"{$ssnameBibFromList}\" xml");
-
-
-// Alma data count:
-
-
-	$AlmaBibCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} BIB '' DB");
-	$AlmaHolCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} HOL '' DB");
-	$AlmaItemCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} ITEM '' DB");
-	$AlmaLoanCount = shell_exec("csh -fx scripts/run_data_count.sh {$ImplHostName} {$inst_id} LOAN '' DB");
-
+	$providedItemsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} ITEM \"{$ssNameItemsFromList}\" csv");
+	$providedPatronsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PATRON \"{$ssNamePatronsFromList}\" csv");
+	$providedVendorsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} VENDOR \"{$ssNameVendosFromList}\" csv");
+	$providedOrdersCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} PURCHASEORDER \"{$ssNameOrdersFromList}\" csv");
+	$providedLoansCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} LOAN \"{$ssNameLoansFromList}\" csv");
+	$providedP2ECount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} P2E \"{$ssnameP2EFromList}\" csv");
+	$providedRequestsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} REQUEST \"{$ssNameRequestsFromList}\" csv");
+	$providedFundsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} FUND \"{$ssNameFundsFromList}\" csv");
 
 // TABLES FINAL SUMMARY
 
@@ -669,56 +653,58 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 	echo '<div style="width: 135%; overflow: hidden;">
 
 
-	<div style="width: 325px; float: left;">
+	<div id="tablesDiv" style="width: 325px; float: left;">
 
 
-<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
+	<table id="deliveredFilesTable" width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
   <tr>
-    <th><b>Created XMLs</b></th>
+    <th><b>Listed in Delivered Files List</b></th>
     <th><b>Count</b></th>
   </tr>
   <tr>
-    	<td>Bib XMLs</td>
-    	<td>'. $XMLBibCount.'</td>
+    <td>Bibs</td>
+    <td>'. $outputBibFromList.'</td>
   </tr>
   <tr>
-    	<td>Holdings XMLs</td>
-    	<td>'. $XMLHolCount.'</td>
+    <td>Holdings</td>
+    <td>'. $outputHoldingsFromList.'</td>
   </tr>
 	<tr>
-    	<td>Items XMLs</td>
-    	<td>'. $XMLItemsCount.'</td>
+    <td>Items</td>
+    <td>'. $outputItemsFromList.'</td>
   </tr>
 	<tr>
-    	<td>Patrons XMLs</td>
-    	<td>'. $XMLPatronsCount.'</td>
+    <td>Patrons</td>
+    <td>'. $outputPatronsFromList.'</td>
+  </tr>
+	 </tr>
+	<tr>
+    <td>Loans</td>
+    <td>'. $outputLoansFromList.'</td>
+  </tr>
+<tr>
+    <td>Requests</td>
+    <td>'. $outputRequestsFromList.'</td>
   </tr>
 	<tr>
-    	<td>Loans XMLs</td>
-    	<td>'. $XMLLoansCount.'</td>
+    <td>Orders</td>
+    <td>'. $outputOrdersFromList.'</td>
   </tr>
-	<tr>
-    	<td>Requests XMLs</td>
-   	 	<td>'. $XMLRequestsCount.'</td>
+<tr>
+    <td>Funds</td>
+    <td>'. $outputFundsFromList.'</td>
   </tr>
-	<tr>
-    	<td>Orders XMLs</td>
-    	<td>'. $XMLOrdersCount.'</td>
+<tr>
+<tr>
+    <td>Vendors</td>
+    <td>'. $outputFundsFromList.'</td>
   </tr>
-	<tr>
-    	<td>Funds in XMLs</td>
-    	<td>'. $XMLFundsCount.'</td>
+<tr>
+    <td>P2E</td>
+    <td>'. $outputP2EFromList.'</td>
   </tr>
-	<tr>
-    	<td>Vendors</td>
-    	<td>'. $XMLVendorsCount.'</td>
-  	</tr>
-	<tr>
-    	<td>P2E records</td>
-    	<td>'. $XMLP2ECount.'</td>
-  </tr>
-
 </table>
+
 </div>
 
 
@@ -727,28 +713,28 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 	<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" style="margin-right:10px;">
   <tr>
-    	<th><b>Alma Loaded Data</b></th>
+    	<th><b>Provided source data</b></th>
     	<th><b>Count</b></th>
   </tr>
   <tr>
     	<td>Bibs</td>
-    	<td>'. $AlmaBibCount.'</td>
+    	<td>'. $last_word_bibP.'</td>
   </tr>
   <tr>
     	<td>Holdings</td>
-    	<td>'. $AlmaHolCount.'</td>
+    	<td>'. $last_word_holP.'</td>
   </tr>
 	<tr>
     	<td>Items</td>
-    	<td>'. $AlmaItemCount.'</td>
+    	<td>'. $providedItemsCount.'</td>
   </tr>
 	<tr>
     	<td>Patrons</td>
-    	<td></td>
+    	<td>'. $providedPatronsCount.'</td>
   </tr>
 	<tr>
     	<td>Loans</td>
-    	<td>'. $AlmaLoanCount.'</td>
+    	<td>'. $providedLoansCount.'</td>
   </tr>
 	<tr>
     	<td>Requests</td>
@@ -822,7 +808,23 @@ function fnExcelReport()
 
 </script>
 
+<?php
+
+
+	readfile("/home/amirc/public_html/tool/report.txt");
+	echo file_get_contents("/home/amirc/public_html/tool/report.txt");
+
+?>
+
+<?php
+
+$sessionfile = fopen("sessionfile.txt", "r");
+session_decode(fgets($sessionfile,  4096) );
+fclose($sessionfile);
+
+?>
 </div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
@@ -838,3 +840,6 @@ function fnExcelReport()
 </html>
 
 
+
+</body>
+</html>

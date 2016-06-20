@@ -480,11 +480,11 @@ echo '</b>';
 	dinst {$fullEnvName}
 	go report
 	wc -l bib_rejected* | grep total";
-
+*/
 	$connection = ssh2_connect($HostName, 22);
 	ssh2_auth_password($connection, 'urm', 'urm');
 
-*/
+
 	$stream = ssh2_exec($connection, $countProvidedBibs);
 	stream_set_blocking($stream, true);
 	$stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
@@ -641,6 +641,8 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 
 	$ssnameBibFromList = substr($nameBibFromList, 0,8) . "*" . substr($nameBibFromList, -7);
+	$ssnameHolFromList = substr($nameHoldingsFromList, 0,8) . "*" . substr($nameHoldingsFromList, -7);
+
 	$ssNameItemsFromList = substr($nameItemsFromList, 0,8) . "*" . substr($nameItemsFromList, -7);
 	$ssNameFundsFromList = substr($nameFundsFromList, 0,8) . "*" . substr($nameFundsFromList, -7);
 	$ssNameVendosFromList = substr($nameVendorsFromList, 0,8) . "*" . substr($nameVendorsFromList, -7);
@@ -653,6 +655,7 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 
 	$ssnameBibFromList = trim($ssnameBibFromList);
+	$ssnameHolFromList = trim($ssnameHolFromList);
 	$ssNameItemsFromList = trim($ssNameItemsFromList);
 	$ssNameFundsFromList = trim($ssNameFundsFromList);
 	$ssNameVendosFromList = trim($ssNameVendosFromList);
@@ -691,6 +694,7 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
 
 
 	$XMLBibsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} BIB \"{$ssnameBibFromList}\" xml");
+	$XMLHolsCount = shell_exec("csh -fx scripts/run_data_count.sh {$HostName} {$fullEnvName} HOL \"{$ssnameHolFromList}\" xml");
 
 // TABLES FINAL SUMMARY
 
@@ -817,7 +821,7 @@ $nameP2EFromList = shell_exec("csh -fx /home/amirc/public_html/tool/scripts/run_
   </tr>
   <tr>
     	<td>Holdings XMLs</td>
-    	<td>'. $last_word_holX.'</td>
+    	<td>'. $XMLHolsCount.'</td>
   </tr>
 	<tr>
     	<td>Items XMLs</td>
