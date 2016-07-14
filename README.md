@@ -42,11 +42,16 @@ Add additional notes about how to deploy this when running on a live Migration p
 
 ## Built With
 
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
+* Java - 1.6 SDK
+* HTML 5
+* PHP 2
+* JavaScript
+* jQuery
+* mySQL
+* Bash
+* Perl
 
-## Authors
+## Author
 
 * **Amir Cohen** - *Initial work* - [Amir Cohen's Final Project](https://github.com/amir-s-cohen/Final_Project)
 
