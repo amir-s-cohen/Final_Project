@@ -29,10 +29,6 @@ And repeat
 
 until finished
 
-
-End with an example of getting some data out of the system or using it for a little demo
-
-
 ## Deployment
 
 Add additional notes about how to deploy this when running on a live Migration project:
