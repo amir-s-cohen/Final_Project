@@ -1,60 +1,44 @@
-# Final Project Title
+# Pre and Post Migration To Alma Sanity Checks - בדיקות תקינות נתונים טרם לאחר הסבה לאלמה 
 
-Pre and Post Migration To Alma Sanity Checks - בדיקות תקינות נתונים טרם לאחר הסבה לאלמה 
+## Getting Started 
 
-## Getting Started
-
-ההוראות הבאות נועדו להסביר כיצד יש להשתמש באתר בדיקות הנתונים הייעודי הפנים צוותי.
+These instructions will help access and use the the dedicated AMO internal team site for the Migration To Alma Sanity Checks. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisities
 
-What things you need to install the software and how to install them
+1. You must be an Alma Migration Operations team members - either an Analyst or a Programmer.
+2. Send you IP to Amir Cohen, who will add it to the allowed IPs of this system.
 
-```
-Give examples
-```
+### Using the System
 
-### Installing
-
-A step by step series of examples that tell you have to get a development env running
-
-Stay what the step will be
-
-```
-Give the example
-```
-
+1. Once confirmed by Amir that your IP was added to the allowed IPs, access the il-almaimp01/~amirc/ 
+2. In order to run the Sanity checks do the following:
+    a. Search for you project in the dedicated search field - institution code oriented.
+    b. Once you get the project's details results use them in the next step.
+    c. Click on the "Migration Sanity Checks" link, and access the Sanity checks form page.
+    d. Once you reached the "Migration Sanity Checks" form, upload your project's Delivered Files list.
+    e. Choose the relevant Migration and Implemenation servers.
+    f. Enter the Migration environment name and institution ID.
+    g. Choose the desired Migration Sanity Check and click on its button.
+    h. Wait for the system to run the requested job.
+    i. See the requested Sanity Checks results.
+    j. If need, use the EXPORT button to export the results to a Microsoft Excel downloadable file.
+    
 And repeat
 
-```
 until finished
-```
+
 
 End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Add additional notes about how to deploy this when running on a live Migration project:
+
+1. When getting search results, make sure to use the relevant migration's information - TestLoad or Cutover. Usually both Migration type results will be available.
+2. You should your most updated Delivered Files list file, which can only be a Microsoft Excel (.xlsx) file.
+3. For re-searching projects, you must access the AMO internal site home page at il-almaimp01/~amirc/.
 
 ## Built With
 
@@ -62,26 +46,13 @@ Add additional notes about how to deploy this on a live system
 * Maven - Maybe
 * Atom - ergaerga
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Amir Cohen** - *Initial work* - [Amir Cohen's Final Project](https://github.com/amir-s-cohen/Final_Project)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* Shay Tavor (Academic Instructor)
+* Chaim Elbaum (Professional Instructor)
+* Michael Privorotsky - AMO team member
